@@ -35,7 +35,34 @@
   main{padding:6vh 5vw; max-width:900px; margin:0 auto;}
   h1{font-size:2rem; font-weight:800; margin-bottom:10px;}
   .sub{color:var(--text-dim); margin-bottom:30px;}
+  .loading{color:var(--text-dim); padding:40px 0;}
+  .empty-state{color:var(--text-dim); padding:40px 0; text-align:center;}
+  .back-link{color:var(--text-dim); text-decoration:none; font-size:13px; font-weight:600; background:none; border:none; cursor:pointer; font-family:'Poppins', sans-serif; margin-bottom:22px; display:inline-block;}
+  .back-link:hover{color:var(--text);}
 
+  /* ---- Course catalog ---- */
+  .course-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(250px,1fr)); gap:18px;}
+  .course-card{
+    background:var(--panel); border:1px solid var(--panel-line); border-radius:10px;
+    overflow:hidden; cursor:pointer; display:flex; flex-direction:column; transition:border-color 0.15s ease;
+  }
+  .course-card:hover{border-color:var(--scope-cyan);}
+  .course-thumb{width:100%; height:140px; background:var(--bg); object-fit:cover; display:block;}
+  .course-thumb-placeholder{
+    width:100%; height:140px; background:var(--bg); display:flex; align-items:center; justify-content:center;
+    color:var(--text-dim); font-size:12px;
+  }
+  .course-card-body{padding:18px 20px; display:flex; flex-direction:column; gap:10px; flex:1;}
+  .course-card-body h3{font-size:1.05rem; font-weight:700;}
+  .course-card-body p{font-size:13px; color:var(--text-dim); line-height:1.5;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
+  .course-progress-shell{background:var(--bg); border-radius:6px; padding:3px; margin-top:auto;}
+  .course-progress-bar{height:6px; background:var(--scope-cyan); border-radius:5px; width:0%;}
+  .course-progress-label{font-size:11.5px; color:var(--text-dim); font-weight:600; margin-top:6px;}
+
+  /* ---- Course detail (modules) ---- */
+  .course-detail-head{margin-bottom:26px;}
+  .course-detail-head h1{margin-bottom:6px;}
   .progress-shell{
     background:var(--panel); border:1px solid var(--panel-line); border-radius:8px;
     padding:4px; margin-bottom:36px;
@@ -74,9 +101,6 @@
   }
   .check-btn.done{background:var(--scope-cyan); color:#14151A; border-color:var(--scope-cyan);}
   .check-btn:hover{border-color:var(--scope-cyan);}
-
-  .loading{color:var(--text-dim); padding:40px 0;}
-  .empty-state{color:var(--text-dim); padding:40px 0; text-align:center;}
 
   /* Settings modal */
   .modal-overlay{
@@ -118,17 +142,8 @@
   </header>
 
   <main>
-    <div id="loading" class="loading">Loading your course...</div>
-
-    <div id="content" style="display:none;">
-      <h1>Your course</h1>
-      <p class="sub">Click a module to open it. Mark each one complete as you finish it.</p>
-
-      <div class="progress-label" id="progress-label">0 / 0 modules complete</div>
-      <div class="progress-shell"><div class="progress-bar" id="progress-bar"></div></div>
-
-      <div id="module-list"></div>
-    </div>
+    <div id="loading" class="loading">Loading your courses...</div>
+    <div id="content" style="display:none;"></div>
   </main>
 
   <div class="modal-overlay" id="settings-modal">
@@ -149,10 +164,15 @@
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpheXJ3cm5sbmRsYXZteHl3YXp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUxNDIwODgsImV4cCI6MjEwMDcxODA4OH0.lRSNGUf_sKE2vzy39zT1BYGUnHH-bXWiR1GnxOCgJpQ';
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+  const content = document.getElementById('content');
+
   let currentUser = null;
   let currentSession = null;
-  let completedSet = new Set(); // set of module ids
-  let modules = []; // [{id, position, title, youtube_url, description, files:[...]}]
+  let completedSet = new Set(); // module ids
+  let courses = [];
+  let allModules = []; // all modules across all courses: {id, course_id, position, title, ...}
+  let courseThumbUrls = {};
+  let currentCourseId = null;
   let openModuleId = null;
 
   function getYouTubeId(url) {
@@ -170,7 +190,7 @@
   }
 
   function escapeHtml(str) {
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return String(str==null?'':str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
   async function init() {
@@ -193,30 +213,106 @@
     const { data: progressRows } = await sb.from('progress').select('module_id').eq('user_id', currentUser.id);
     completedSet = new Set((progressRows || []).map(r => r.module_id));
 
+    const { data: courseRows } = await sb.from('courses').select('*').order('created_at');
     const { data: contentRows } = await sb.from('course_content').select('*').order('position');
-    const { data: fileRows } = await sb.from('course_files').select('*').order('uploaded_at');
+    courses = courseRows || [];
+    allModules = contentRows || [];
 
-    modules = (contentRows || []).map(row => ({
-      ...row,
-      files: (fileRows || []).filter(f => f.module_id === row.id)
-    }));
-
-    renderModules();
     document.getElementById('loading').style.display = 'none';
-    document.getElementById('content').style.display = 'block';
+    content.style.display = 'block';
+    await renderCatalog();
   }
 
-  function renderModules() {
-    const list = document.getElementById('module-list');
-    list.innerHTML = '';
+  // ============================================================
+  // CATALOG VIEW
+  // ============================================================
+  async function renderCatalog() {
+    currentCourseId = null;
 
-    if (modules.length === 0) {
-      list.innerHTML = '<div class="empty-state">No modules have been published yet — check back soon.</div>';
-      updateProgressBar();
+    courseThumbUrls = {};
+    await Promise.all(courses.map(async c => {
+      if (c.thumbnail_path) {
+        const { data } = await sb.storage.from('course-files').createSignedUrl(c.thumbnail_path, 3600);
+        if (data) courseThumbUrls[c.id] = data.signedUrl;
+      }
+    }));
+
+    content.innerHTML =
+      '<h1>Your courses</h1>' +
+      '<p class="sub">Pick a course to continue where you left off.</p>' +
+      '<div class="course-grid" id="course-grid"></div>';
+
+    const grid = document.getElementById('course-grid');
+
+    if (courses.length === 0) {
+      grid.insertAdjacentHTML('beforebegin', '<div class="empty-state">No courses have been published yet — check back soon.</div>');
       return;
     }
 
-    modules.forEach((m, idx) => {
+    courses.forEach(c => {
+      const modsForCourse = allModules.filter(m => m.course_id === c.id);
+      const total = modsForCourse.length;
+      const completed = modsForCourse.filter(m => completedSet.has(m.id)).length;
+      const pct = total ? Math.round((completed / total) * 100) : 0;
+
+      const thumb = courseThumbUrls[c.id]
+        ? '<img class="course-thumb" src="' + courseThumbUrls[c.id] + '" alt="">'
+        : '<div class="course-thumb-placeholder">No thumbnail</div>';
+
+      const card = document.createElement('div');
+      card.className = 'course-card';
+      card.dataset.id = c.id;
+      card.innerHTML =
+        thumb +
+        '<div class="course-card-body">' +
+          '<h3>' + escapeHtml(c.title) + '</h3>' +
+          '<p>' + escapeHtml(c.description || '') + '</p>' +
+          '<div class="course-progress-shell"><div class="course-progress-bar" style="width:' + pct + '%;"></div></div>' +
+          '<div class="course-progress-label">' + completed + ' / ' + total + ' modules complete</div>' +
+        '</div>';
+      card.addEventListener('click', () => renderCourseDetail(c.id));
+      grid.appendChild(card);
+    });
+  }
+
+  // ============================================================
+  // COURSE DETAIL VIEW (modules)
+  // ============================================================
+  async function renderCourseDetail(courseId) {
+    currentCourseId = courseId;
+    openModuleId = null;
+    const course = courses.find(c => c.id === courseId);
+    const modsForCourse = allModules.filter(m => m.course_id === courseId).sort((a,b) => a.position - b.position);
+
+    const { data: fileRows } = await sb.from('course_files').select('*').order('uploaded_at');
+    modsForCourse.forEach(m => {
+      m.files = (fileRows || []).filter(f => f.module_id === m.id);
+    });
+
+    content.innerHTML =
+      '<button class="back-link" id="back-to-catalog">&larr; Back to courses</button>' +
+      '<div class="course-detail-head">' +
+        '<h1>' + escapeHtml(course.title) + '</h1>' +
+        '<p class="sub">' + escapeHtml(course.description || '') + '</p>' +
+      '</div>' +
+      '<div class="progress-label" id="progress-label"></div>' +
+      '<div class="progress-shell"><div class="progress-bar" id="progress-bar"></div></div>' +
+      '<div id="module-list"></div>';
+
+    document.getElementById('back-to-catalog').addEventListener('click', renderCatalog);
+
+    renderModuleList(modsForCourse);
+  }
+
+  function renderModuleList(modsForCourse) {
+    const list = document.getElementById('module-list');
+    list.innerHTML = '';
+
+    if (modsForCourse.length === 0) {
+      list.innerHTML = '<div class="empty-state">No modules have been added to this course yet.</div>';
+    }
+
+    modsForCourse.forEach((m, idx) => {
       const isDone = completedSet.has(m.id);
       const isOpen = openModuleId === m.id;
 
@@ -231,7 +327,7 @@
       }
 
       let filesHtml = '';
-      if (m.files.length) {
+      if (m.files && m.files.length) {
         filesHtml = '<div class="file-links">' + m.files.map(f =>
           '<a class="file-link" href="#" data-path="' + f.file_path + '">' + escapeHtml(f.file_name) + '</a>'
         ).join('') + '</div>';
@@ -258,14 +354,14 @@
         if (e.target.classList.contains('check-btn')) return;
         const id = parseInt(head.dataset.toggle, 10);
         openModuleId = (openModuleId === id) ? null : id;
-        renderModules();
+        renderModuleList(modsForCourse);
       });
     });
 
     document.querySelectorAll('.check-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        toggleModule(parseInt(btn.dataset.mod, 10));
+        toggleModule(parseInt(btn.dataset.mod, 10), modsForCourse);
       });
     });
 
@@ -278,17 +374,18 @@
       });
     });
 
-    updateProgressBar();
+    updateProgressBar(modsForCourse);
   }
 
-  function updateProgressBar() {
-    const total = modules.length;
-    const pct = total ? Math.round((completedSet.size / total) * 100) : 0;
+  function updateProgressBar(modsForCourse) {
+    const total = modsForCourse.length;
+    const completed = modsForCourse.filter(m => completedSet.has(m.id)).length;
+    const pct = total ? Math.round((completed / total) * 100) : 0;
     document.getElementById('progress-bar').style.width = pct + '%';
-    document.getElementById('progress-label').textContent = completedSet.size + ' / ' + total + ' modules complete';
+    document.getElementById('progress-label').textContent = completed + ' / ' + total + ' modules complete';
   }
 
-  async function toggleModule(moduleId) {
+  async function toggleModule(moduleId, modsForCourse) {
     if (completedSet.has(moduleId)) {
       await sb.from('progress').delete().eq('user_id', currentUser.id).eq('module_id', moduleId);
       completedSet.delete(moduleId);
@@ -296,7 +393,7 @@
       await sb.from('progress').insert({ user_id: currentUser.id, module_id: moduleId });
       completedSet.add(moduleId);
     }
-    renderModules();
+    renderModuleList(modsForCourse);
   }
 
   document.getElementById('logout-btn').addEventListener('click', async () => {

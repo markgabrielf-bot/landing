@@ -20,15 +20,78 @@
   }
   .brand{font-weight:800; font-size:1.1rem;}
   .brand .accent{color:var(--signal-red);}
-  .back-link{color:var(--text-dim); text-decoration:none; font-size:13px; font-weight:600;}
+  .back-link{color:var(--text-dim); text-decoration:none; font-size:13px; font-weight:600; background:none; border:none; cursor:pointer; font-family:'Poppins', sans-serif;}
   .back-link:hover{color:var(--text);}
-  main{padding:5vh 5vw; max-width:820px; margin:0 auto;}
+  main{padding:5vh 5vw; max-width:900px; margin:0 auto;}
   h1{font-size:1.8rem; font-weight:800; margin-bottom:8px;}
   .sub{color:var(--text-dim); margin-bottom:32px;}
   .loading{color:var(--text-dim); padding:40px 0;}
+  .denied{padding:10vh 0; text-align:center; color:var(--text-dim);}
 
+  /* ---- Course catalog ---- */
+  .course-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(240px,1fr)); gap:18px;}
+  .course-card{
+    background:var(--panel); border:1px solid var(--panel-line); border-radius:10px;
+    overflow:hidden; display:flex; flex-direction:column;
+  }
+  .course-thumb{width:100%; height:130px; background:var(--bg); object-fit:cover; display:block;}
+  .course-thumb-placeholder{
+    width:100%; height:130px; background:var(--bg); display:flex; align-items:center; justify-content:center;
+    color:var(--text-dim); font-size:12px;
+  }
+  .course-card-body{padding:16px 18px; display:flex; flex-direction:column; gap:8px; flex:1;}
+  .course-card-body h3{font-size:1rem; font-weight:700;}
+  .course-card-body p{font-size:13px; color:var(--text-dim); line-height:1.5; flex:1;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
+  .course-meta{font-size:11.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.04em; font-weight:600;}
+  .course-card-actions{display:flex; gap:8px; margin-top:6px;}
+  .manage-btn{
+    background:var(--scope-cyan); color:#14151A; border:none; font-weight:700;
+    font-size:12.5px; padding:9px 14px; border-radius:7px; cursor:pointer; flex:1;
+  }
+  .manage-btn:hover{opacity:0.9;}
+  .icon-action{
+    background:var(--bg); border:1px solid var(--panel-line); color:var(--text-dim);
+    width:32px; height:32px; border-radius:7px; cursor:pointer; font-size:13px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .icon-action:hover{border-color:var(--signal-red); color:var(--signal-red);}
+
+  .create-card{
+    border:1px dashed var(--panel-line); border-radius:10px; display:flex; align-items:center;
+    justify-content:center; min-height:220px; cursor:pointer; color:var(--scope-cyan);
+    font-weight:700; font-size:14px; background:var(--panel);
+  }
+  .create-card:hover{border-color:var(--scope-cyan); background:var(--bg);}
+
+  /* ---- Forms ---- */
+  label{font-size:12px; color:var(--text-dim); letter-spacing:0.04em; text-transform:uppercase; font-weight:600; display:block; margin-bottom:6px;}
+  .field{margin-bottom:14px;}
+  input[type=text], textarea{
+    background:var(--bg); border:1px solid var(--panel-line); color:var(--text);
+    font-family:'Poppins', sans-serif; font-size:14px; padding:11px 13px;
+    border-radius:8px; width:100%; resize:vertical;
+  }
+  input[type=text]:focus, textarea:focus{outline:none; border-color:var(--scope-cyan);}
+  input[type=file]{font-family:'Poppins', sans-serif; font-size:13px; color:var(--text-dim);}
+  .save-btn{
+    background:var(--scope-cyan); color:#14151A; border:none; font-weight:700;
+    font-size:13px; padding:10px 20px; border-radius:8px; cursor:pointer; margin-top:6px;
+  }
+  .save-btn:hover{opacity:0.9;}
+  .save-btn:disabled{opacity:0.5; cursor:not-allowed;}
+  .status{font-size:12px; color:var(--scope-cyan); margin-top:8px; min-height:16px;}
+  .status.error{color:var(--signal-red);}
+
+  .form-card{
+    background:var(--panel); border:1px solid var(--panel-line); border-radius:10px;
+    padding:22px 24px; margin-bottom:24px;
+  }
+  .form-card h3{font-size:1rem; font-weight:700; margin-bottom:16px;}
+  .empty-state{text-align:center; padding:40px 0; color:var(--text-dim); font-size:14px;}
+
+  /* ---- Module management ---- */
   .module-list-wrap{display:flex; flex-direction:column;}
-
   .insert-row{
     display:flex; align-items:center; justify-content:center;
     height:22px; opacity:0; transition:opacity 0.15s ease;
@@ -41,14 +104,11 @@
     line-height:1; display:flex; align-items:center; justify-content:center;
   }
   .insert-btn:hover{border-color:var(--scope-cyan); background:var(--bg);}
-
   .module-card{
     background:var(--panel); border:1px solid var(--panel-line); border-radius:10px;
     padding:22px 24px; position:relative;
   }
-  .module-card-head{
-    display:flex; align-items:center; gap:10px; margin-bottom:16px;
-  }
+  .module-card-head{display:flex; align-items:center; gap:10px; margin-bottom:16px;}
   .tag{color:var(--scope-cyan); font-weight:700; font-size:12px; flex-shrink:0; white-space:nowrap;}
   .title-input{
     flex:1; background:var(--bg); border:1px solid var(--panel-line); color:var(--text);
@@ -57,48 +117,17 @@
   }
   .title-input:focus{outline:none; border-color:var(--scope-cyan);}
   .card-actions{display:flex; gap:6px; flex-shrink:0;}
-  .icon-action{
-    background:var(--bg); border:1px solid var(--panel-line); color:var(--text-dim);
-    width:30px; height:30px; border-radius:7px; cursor:pointer; font-size:13px;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .icon-action:hover{border-color:var(--scope-cyan); color:var(--text);}
-  .icon-action.danger:hover{border-color:var(--signal-red); color:var(--signal-red);}
+  .card-actions .icon-action:hover{border-color:var(--scope-cyan); color:var(--text);}
+  .card-actions .icon-action.danger:hover{border-color:var(--signal-red); color:var(--signal-red);}
   .icon-action:disabled{opacity:0.3; cursor:not-allowed;}
   .icon-action:disabled:hover{border-color:var(--panel-line); color:var(--text-dim);}
-
-  label{font-size:12px; color:var(--text-dim); letter-spacing:0.04em; text-transform:uppercase; font-weight:600; display:block; margin-bottom:6px;}
-  .field{margin-bottom:14px;}
-  input[type=text], textarea{
-    background:var(--bg); border:1px solid var(--panel-line); color:var(--text);
-    font-family:'Poppins', sans-serif; font-size:14px; padding:11px 13px;
-    border-radius:8px; width:100%; resize:vertical;
-  }
-  input[type=text]:focus, textarea:focus{outline:none; border-color:var(--scope-cyan);}
-  input[type=file]{
-    font-family:'Poppins', sans-serif; font-size:13px; color:var(--text-dim);
-  }
   .file-list{display:flex; flex-direction:column; gap:6px; margin:10px 0;}
   .file-row{
     display:flex; align-items:center; justify-content:space-between;
     background:var(--bg); border:1px solid var(--panel-line); border-radius:6px;
     padding:8px 12px; font-size:13px;
   }
-  .file-row .remove-file{
-    background:none; border:none; color:var(--signal-red); cursor:pointer; font-size:12px; font-weight:600;
-  }
-  .save-btn{
-    background:var(--scope-cyan); color:#14151A; border:none; font-weight:700;
-    font-size:13px; padding:10px 20px; border-radius:8px; cursor:pointer; margin-top:6px;
-  }
-  .save-btn:hover{opacity:0.9;}
-  .save-btn:disabled{opacity:0.5; cursor:not-allowed;}
-  .status{font-size:12px; color:var(--scope-cyan); margin-top:8px; min-height:16px;}
-  .status.error{color:var(--signal-red);}
-  .denied{padding:10vh 0; text-align:center; color:var(--text-dim);}
-  .empty-state{
-    text-align:center; padding:40px 0; color:var(--text-dim); font-size:14px;
-  }
+  .file-row .remove-file{background:none; border:none; color:var(--signal-red); cursor:pointer; font-size:12px; font-weight:600;}
   .add-first-btn{
     background:var(--panel); border:1px dashed var(--panel-line); color:var(--scope-cyan);
     font-family:'Poppins', sans-serif; font-weight:700; font-size:13px;
@@ -116,12 +145,7 @@
   <main>
     <div id="loading" class="loading">Checking access...</div>
     <div id="denied" class="denied" style="display:none;">You don't have admin access to this page.</div>
-
-    <div id="content" style="display:none;">
-      <h1>Manage course content</h1>
-      <p class="sub">Add an Unlisted YouTube link, a description, and any files for each module. Use the arrows to reorder, the title field to rename, and the ✕ to remove a module. Students see this on their dashboard.</p>
-      <div id="module-list"></div>
-    </div>
+    <div id="content" style="display:none;"></div>
   </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -130,7 +154,16 @@
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpheXJ3cm5sbmRsYXZteHl3YXp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUxNDIwODgsImV4cCI6MjEwMDcxODA4OH0.lRSNGUf_sKE2vzy39zT1BYGUnHH-bXWiR1GnxOCgJpQ';
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  let modules = []; // [{id, position, title, youtube_url, description, files:[...]}]
+  const content = document.getElementById('content');
+
+  let view = 'catalog'; // 'catalog' | 'manage'
+  let courses = [];
+  let courseThumbUrls = {};
+  let currentCourseId = null;
+  let modules = [];
+
+  function escapeHtml(str){ return String(str==null?'':str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function escapeAttr(str){ return escapeHtml(str).replace(/"/g,'&quot;'); }
 
   async function init() {
     const { data: { session } } = await sb.auth.getSession();
@@ -145,13 +178,200 @@
       return;
     }
 
-    await loadModules();
     document.getElementById('loading').style.display = 'none';
-    document.getElementById('content').style.display = 'block';
+    content.style.display = 'block';
+    await renderCatalog();
   }
 
-  async function loadModules() {
-    const { data: contentRows } = await sb.from('course_content').select('*').order('position');
+  // ============================================================
+  // CATALOG VIEW
+  // ============================================================
+  async function renderCatalog() {
+    view = 'catalog';
+    const { data: courseRows } = await sb.from('courses').select('*').order('created_at');
+    const { data: allModules } = await sb.from('course_content').select('id, course_id');
+    courses = courseRows || [];
+
+    const counts = {};
+    (allModules || []).forEach(m => { counts[m.course_id] = (counts[m.course_id] || 0) + 1; });
+
+    // fetch signed thumbnail urls
+    courseThumbUrls = {};
+    await Promise.all(courses.map(async c => {
+      if (c.thumbnail_path) {
+        const { data } = await sb.storage.from('course-files').createSignedUrl(c.thumbnail_path, 3600);
+        if (data) courseThumbUrls[c.id] = data.signedUrl;
+      }
+    }));
+
+    content.innerHTML =
+      '<h1>Courses</h1>' +
+      '<p class="sub">Create and manage your courses. Click into a course to edit its modules.</p>' +
+      '<div class="course-grid" id="course-grid"></div>';
+
+    const grid = document.getElementById('course-grid');
+
+    courses.forEach(c => {
+      const card = document.createElement('div');
+      card.className = 'course-card';
+      const thumb = courseThumbUrls[c.id]
+        ? '<img class="course-thumb" src="' + courseThumbUrls[c.id] + '" alt="">'
+        : '<div class="course-thumb-placeholder">No thumbnail</div>';
+      card.innerHTML =
+        thumb +
+        '<div class="course-card-body">' +
+          '<div class="course-meta">' + (counts[c.id] || 0) + ' modules</div>' +
+          '<h3>' + escapeHtml(c.title) + '</h3>' +
+          '<p>' + escapeHtml(c.description || '') + '</p>' +
+          '<div class="course-card-actions">' +
+            '<button class="manage-btn" data-id="' + c.id + '">Manage</button>' +
+            '<button class="icon-action danger" data-delete="' + c.id + '" title="Delete course">&#10005;</button>' +
+          '</div>' +
+        '</div>';
+      grid.appendChild(card);
+    });
+
+    const createCard = document.createElement('div');
+    createCard.className = 'create-card';
+    createCard.id = 'open-create-course';
+    createCard.textContent = '+ Create Course';
+    grid.appendChild(createCard);
+
+    if (courses.length === 0) {
+      grid.insertAdjacentHTML('beforebegin', '<div class="empty-state">No courses yet — create your first one below.</div>');
+    }
+
+    grid.querySelectorAll('.manage-btn').forEach(btn => {
+      btn.addEventListener('click', () => renderManage(parseInt(btn.dataset.id, 10)));
+    });
+    grid.querySelectorAll('[data-delete]').forEach(btn => {
+      btn.addEventListener('click', () => deleteCourse(parseInt(btn.dataset.delete, 10)));
+    });
+    document.getElementById('open-create-course').addEventListener('click', showCreateCourseForm);
+  }
+
+  function showCreateCourseForm() {
+    const existing = document.getElementById('create-course-form-card');
+    if (existing) { existing.scrollIntoView({behavior:'smooth'}); return; }
+
+    const formCard = document.createElement('div');
+    formCard.className = 'form-card';
+    formCard.id = 'create-course-form-card';
+    formCard.innerHTML =
+      '<h3>New course</h3>' +
+      '<div class="field"><label>Course title</label><input type="text" id="new-course-title" placeholder="e.g. Photography Basics"></div>' +
+      '<div class="field"><label>Description</label><textarea id="new-course-desc" rows="3" placeholder="What is this course about?"></textarea></div>' +
+      '<div class="field"><label>Thumbnail image</label><input type="file" id="new-course-thumb" accept="image/*"></div>' +
+      '<button class="save-btn" id="create-course-btn">Create Course</button>' +
+      '<div class="status" id="create-course-status"></div>';
+
+    content.insertBefore(formCard, document.getElementById('course-grid'));
+    document.getElementById('create-course-btn').addEventListener('click', createCourse);
+    formCard.scrollIntoView({behavior:'smooth'});
+  }
+
+  async function createCourse() {
+    const btn = document.getElementById('create-course-btn');
+    const status = document.getElementById('create-course-status');
+    const title = document.getElementById('new-course-title').value.trim();
+    const description = document.getElementById('new-course-desc').value.trim();
+    const thumbFile = document.getElementById('new-course-thumb').files[0];
+
+    if (!title) { status.className = 'status error'; status.textContent = 'Please enter a title.'; return; }
+
+    btn.disabled = true;
+    status.className = 'status';
+    status.textContent = 'Creating...';
+
+    const { data: course, error } = await sb.from('courses')
+      .insert({ title, description }).select().single();
+
+    if (error) {
+      status.className = 'status error'; status.textContent = error.message; btn.disabled = false; return;
+    }
+
+    if (thumbFile) {
+      const path = 'thumbnails/' + course.id + '-' + Date.now() + '-' + thumbFile.name;
+      const { error: upErr } = await sb.storage.from('course-files').upload(path, thumbFile);
+      if (!upErr) {
+        await sb.from('courses').update({ thumbnail_path: path }).eq('id', course.id);
+      }
+    }
+
+    await renderCatalog();
+  }
+
+  async function deleteCourse(id) {
+    const c = courses.find(x => x.id === id);
+    if (!confirm('Delete "' + (c ? c.title : 'this course') + '"? This removes all its modules, files, and student progress. This can\'t be undone.')) return;
+    await sb.from('courses').delete().eq('id', id);
+    await renderCatalog();
+  }
+
+  // ============================================================
+  // MANAGE VIEW (modules for one course)
+  // ============================================================
+  async function renderManage(courseId) {
+    view = 'manage';
+    currentCourseId = courseId;
+    const course = courses.find(c => c.id === courseId);
+
+    content.innerHTML =
+      '<button class="back-link" id="back-to-catalog" style="margin-bottom:20px;">&larr; Back to courses</button>' +
+      '<div class="form-card" id="course-info-card">' +
+        '<h3>Course info</h3>' +
+        '<div class="field"><label>Course title</label><input type="text" id="course-title" value="' + escapeAttr(course.title) + '"></div>' +
+        '<div class="field"><label>Description</label><textarea id="course-desc" rows="3">' + escapeHtml(course.description || '') + '</textarea></div>' +
+        '<div class="field"><label>Thumbnail image</label><input type="file" id="course-thumb-input" accept="image/*"></div>' +
+        '<button class="save-btn" id="save-course-info-btn">Save Course Info</button>' +
+        '<div class="status" id="course-info-status"></div>' +
+      '</div>' +
+      '<h1>Modules</h1>' +
+      '<p class="sub">Use the arrows to reorder, the title field to rename, and the ✕ to remove a module.</p>' +
+      '<div id="module-list"></div>';
+
+    document.getElementById('back-to-catalog').addEventListener('click', renderCatalog);
+    document.getElementById('save-course-info-btn').addEventListener('click', () => saveCourseInfo(courseId));
+
+    await loadModules(courseId);
+  }
+
+  async function saveCourseInfo(courseId) {
+    const btn = document.getElementById('save-course-info-btn');
+    const status = document.getElementById('course-info-status');
+    btn.disabled = true;
+    status.className = 'status';
+    status.textContent = 'Saving...';
+
+    const title = document.getElementById('course-title').value.trim() || 'Untitled Course';
+    const description = document.getElementById('course-desc').value.trim();
+    const thumbFile = document.getElementById('course-thumb-input').files[0];
+
+    const updates = { title, description };
+
+    if (thumbFile) {
+      const path = 'thumbnails/' + courseId + '-' + Date.now() + '-' + thumbFile.name;
+      const { error: upErr } = await sb.storage.from('course-files').upload(path, thumbFile);
+      if (upErr) {
+        status.className = 'status error'; status.textContent = 'Thumbnail upload failed: ' + upErr.message;
+        btn.disabled = false; return;
+      }
+      updates.thumbnail_path = path;
+    }
+
+    const { error } = await sb.from('courses').update(updates).eq('id', courseId);
+    if (error) {
+      status.className = 'status error'; status.textContent = error.message; btn.disabled = false; return;
+    }
+
+    status.textContent = 'Saved.';
+    btn.disabled = false;
+    const idx = courses.findIndex(c => c.id === courseId);
+    if (idx > -1) courses[idx] = { ...courses[idx], ...updates };
+  }
+
+  async function loadModules(courseId) {
+    const { data: contentRows } = await sb.from('course_content').select('*').eq('course_id', courseId).order('position');
     const { data: fileRows } = await sb.from('course_files').select('*').order('uploaded_at');
 
     modules = (contentRows || []).map(row => ({
@@ -176,14 +396,11 @@
 
     const wrap = document.createElement('div');
     wrap.className = 'module-list-wrap';
-
     wrap.appendChild(makeInsertRow(0));
-
     modules.forEach((m, idx) => {
       wrap.appendChild(makeModuleCard(m, idx));
       wrap.appendChild(makeInsertRow(idx + 1));
     });
-
     list.appendChild(wrap);
   }
 
@@ -228,7 +445,7 @@
       fileList.appendChild(row);
     });
     fileList.querySelectorAll('.remove-file').forEach(btn => {
-      btn.addEventListener('click', () => removeFile(btn.dataset.fileId, btn.dataset.filePath, m.id));
+      btn.addEventListener('click', () => removeFile(btn.dataset.fileId, btn.dataset.filePath));
     });
 
     card.querySelector('.save-btn').addEventListener('click', () => saveModule(m.id));
@@ -239,22 +456,12 @@
     return card;
   }
 
-  function escapeHtml(str) {
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
-  function escapeAttr(str) {
-    return escapeHtml(str).replace(/"/g,'&quot;');
-  }
-
   async function insertModuleAt(atIndex) {
     const { data, error } = await sb.from('course_content')
-      .insert({ position: 999999, title: 'New Module', youtube_url: '', description: '' })
+      .insert({ course_id: currentCourseId, position: 999999, title: 'New Module', youtube_url: '', description: '' })
       .select().single();
-
     if (error) { alert('Could not add module: ' + error.message); return; }
-
-    const newModule = { ...data, files: [] };
-    modules.splice(atIndex, 0, newModule);
+    modules.splice(atIndex, 0, { ...data, files: [] });
     await renumberAndSave();
   }
 
@@ -270,10 +477,8 @@
   async function deleteModule(id) {
     const mod = modules.find(m => m.id === id);
     if (!confirm('Delete "' + (mod ? mod.title : 'this module') + '"? This also removes its files and student progress for it. This can\'t be undone.')) return;
-
     const { error } = await sb.from('course_content').delete().eq('id', id);
     if (error) { alert('Could not delete module: ' + error.message); return; }
-
     modules = modules.filter(m => m.id !== id);
     await renumberAndSave();
   }
@@ -299,19 +504,11 @@
     const description = document.getElementById('desc-' + id).value.trim();
 
     const { error: upsertError } = await sb.from('course_content')
-      .update({
-        title: title,
-        youtube_url: youtubeUrl,
-        description: description,
-        updated_at: new Date().toISOString()
-      })
+      .update({ title, youtube_url: youtubeUrl, description, updated_at: new Date().toISOString() })
       .eq('id', id);
 
     if (upsertError) {
-      status.className = 'status error';
-      status.textContent = upsertError.message;
-      btn.disabled = false;
-      return;
+      status.className = 'status error'; status.textContent = upsertError.message; btn.disabled = false; return;
     }
 
     const fileInput = document.getElementById('upload-' + id);
@@ -320,25 +517,21 @@
       const path = 'module-' + id + '/' + Date.now() + '-' + file.name;
       const { error: uploadError } = await sb.storage.from('course-files').upload(path, file);
       if (uploadError) {
-        status.className = 'status error';
-        status.textContent = 'File upload failed: ' + uploadError.message;
-        btn.disabled = false;
-        return;
+        status.className = 'status error'; status.textContent = 'File upload failed: ' + uploadError.message;
+        btn.disabled = false; return;
       }
-      await sb.from('course_files').insert({
-        module_id: id, file_name: file.name, file_path: path
-      });
+      await sb.from('course_files').insert({ module_id: id, file_name: file.name, file_path: path });
     }
 
     status.textContent = 'Saved.';
     btn.disabled = false;
-    await loadModules();
+    await loadModules(currentCourseId);
   }
 
-  async function removeFile(fileId, filePath, moduleId) {
+  async function removeFile(fileId, filePath) {
     await sb.storage.from('course-files').remove([filePath]);
     await sb.from('course_files').delete().eq('id', fileId);
-    await loadModules();
+    await loadModules(currentCourseId);
   }
 
   init();
