@@ -76,6 +76,7 @@
   .check-btn:hover{border-color:var(--scope-cyan);}
 
   .loading{color:var(--text-dim); padding:40px 0;}
+  .empty-state{color:var(--text-dim); padding:40px 0; text-align:center;}
 
   /* Settings modal */
   .modal-overlay{
@@ -123,7 +124,7 @@
       <h1>Your course</h1>
       <p class="sub">Click a module to open it. Mark each one complete as you finish it.</p>
 
-      <div class="progress-label" id="progress-label">0 / 10 modules complete</div>
+      <div class="progress-label" id="progress-label">0 / 0 modules complete</div>
       <div class="progress-shell"><div class="progress-bar" id="progress-bar"></div></div>
 
       <div id="module-list"></div>
@@ -148,18 +149,11 @@
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpheXJ3cm5sbmRsYXZteHl3YXp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUxNDIwODgsImV4cCI6MjEwMDcxODA4OH0.lRSNGUf_sKE2vzy39zT1BYGUnHH-bXWiR1GnxOCgJpQ';
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const MODULE_TITLES = [
-    'Introduction & Interface', 'Importing Media', 'Basic Editing', 'Audio Editing',
-    'Text & Titles', 'Transitions', 'Effects & Filters', 'Overlays & Animation',
-    'Exporting', 'Final Project'
-  ];
-
   let currentUser = null;
   let currentSession = null;
-  let completedSet = new Set();
-  let contentByModule = {};
-  let filesByModule = {};
-  let openModule = null;
+  let completedSet = new Set(); // set of module ids
+  let modules = []; // [{id, position, title, youtube_url, description, files:[...]}]
+  let openModuleId = null;
 
   function getYouTubeId(url) {
     if (!url) return null;
@@ -175,6 +169,10 @@
     return null;
   }
 
+  function escapeHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
   async function init() {
     const { data: { session } } = await sb.auth.getSession();
     if (!session) { window.location.href = 'index.html'; return; }
@@ -186,78 +184,80 @@
       .eq('id', currentUser.id).single();
 
     document.getElementById('who-info').innerHTML =
-      (profile ? '<strong>' + profile.full_name + '</strong><br>' + profile.fire_station : currentUser.email);
+      (profile ? '<strong>' + escapeHtml(profile.full_name) + '</strong><br>' + escapeHtml(profile.fire_station) : currentUser.email);
 
     if (profile && profile.is_admin) {
       document.getElementById('admin-link').style.display = 'inline-block';
     }
 
-    const { data: progressRows } = await sb.from('progress').select('module_number').eq('user_id', currentUser.id);
-    completedSet = new Set((progressRows || []).map(r => r.module_number));
+    const { data: progressRows } = await sb.from('progress').select('module_id').eq('user_id', currentUser.id);
+    completedSet = new Set((progressRows || []).map(r => r.module_id));
 
-    const { data: contentRows } = await sb.from('course_content').select('*');
-    (contentRows || []).forEach(r => contentByModule[r.module_number] = r);
-
+    const { data: contentRows } = await sb.from('course_content').select('*').order('position');
     const { data: fileRows } = await sb.from('course_files').select('*').order('uploaded_at');
-    filesByModule = {};
-    (fileRows || []).forEach(f => {
-      if (!filesByModule[f.module_number]) filesByModule[f.module_number] = [];
-      filesByModule[f.module_number].push(f);
-    });
+
+    modules = (contentRows || []).map(row => ({
+      ...row,
+      files: (fileRows || []).filter(f => f.module_id === row.id)
+    }));
 
     renderModules();
     document.getElementById('loading').style.display = 'none';
     document.getElementById('content').style.display = 'block';
   }
 
-  async function renderModules() {
+  function renderModules() {
     const list = document.getElementById('module-list');
     list.innerHTML = '';
 
-    for (let i = 1; i <= 10; i++) {
-      const isDone = completedSet.has(i);
-      const c = contentByModule[i] || { youtube_url: '', description: '' };
-      const files = filesByModule[i] || [];
-      const isOpen = openModule === i;
+    if (modules.length === 0) {
+      list.innerHTML = '<div class="empty-state">No modules have been published yet — check back soon.</div>';
+      updateProgressBar();
+      return;
+    }
+
+    modules.forEach((m, idx) => {
+      const isDone = completedSet.has(m.id);
+      const isOpen = openModuleId === m.id;
 
       const row = document.createElement('div');
       row.className = 'module' + (isDone ? ' done' : '');
 
       let videoHtml = '<div class="no-video">No video uploaded for this module yet.</div>';
-      const ytId = getYouTubeId(c.youtube_url);
+      const ytId = getYouTubeId(m.youtube_url);
       if (ytId) {
         videoHtml = '<div class="video-wrap"><iframe src="https://www.youtube.com/embed/' + ytId +
           '" allowfullscreen></iframe></div>';
       }
 
       let filesHtml = '';
-      if (files.length) {
-        filesHtml = '<div class="file-links">' + files.map(f =>
-          '<a class="file-link" href="#" data-path="' + f.file_path + '">' + f.file_name + '</a>'
+      if (m.files.length) {
+        filesHtml = '<div class="file-links">' + m.files.map(f =>
+          '<a class="file-link" href="#" data-path="' + f.file_path + '">' + escapeHtml(f.file_name) + '</a>'
         ).join('') + '</div>';
       }
 
       row.innerHTML =
-        '<div class="module-head" data-toggle="' + i + '">' +
-          '<span class="num">MOD ' + String(i).padStart(2,'0') + '</span>' +
-          '<div class="module-info"><h3>' + MODULE_TITLES[i-1] + '</h3></div>' +
-          '<button class="check-btn' + (isDone ? ' done' : '') + '" data-mod="' + i + '">' +
+        '<div class="module-head" data-toggle="' + m.id + '">' +
+          '<span class="num">MOD ' + String(idx + 1).padStart(2,'0') + '</span>' +
+          '<div class="module-info"><h3>' + escapeHtml(m.title || 'Untitled Module') + '</h3></div>' +
+          '<button class="check-btn' + (isDone ? ' done' : '') + '" data-mod="' + m.id + '">' +
             (isDone ? 'Completed' : 'Mark complete') + '</button>' +
         '</div>' +
-        '<div class="module-body' + (isOpen ? ' open' : '') + '" id="body-' + i + '">' +
+        '<div class="module-body' + (isOpen ? ' open' : '') + '" id="body-' + m.id + '">' +
           videoHtml +
-          (c.description ? '<p class="module-desc">' + c.description + '</p>' : '') +
+          (m.description ? '<p class="module-desc">' + escapeHtml(m.description) + '</p>' : '') +
           filesHtml +
         '</div>';
 
       list.appendChild(row);
-    }
+    });
 
     document.querySelectorAll('.module-head').forEach(head => {
       head.addEventListener('click', (e) => {
         if (e.target.classList.contains('check-btn')) return;
-        const num = parseInt(head.dataset.toggle, 10);
-        openModule = (openModule === num) ? null : num;
+        const id = parseInt(head.dataset.toggle, 10);
+        openModuleId = (openModuleId === id) ? null : id;
         renderModules();
       });
     });
@@ -282,18 +282,19 @@
   }
 
   function updateProgressBar() {
-    const pct = Math.round((completedSet.size / 10) * 100);
+    const total = modules.length;
+    const pct = total ? Math.round((completedSet.size / total) * 100) : 0;
     document.getElementById('progress-bar').style.width = pct + '%';
-    document.getElementById('progress-label').textContent = completedSet.size + ' / 10 modules complete';
+    document.getElementById('progress-label').textContent = completedSet.size + ' / ' + total + ' modules complete';
   }
 
-  async function toggleModule(num) {
-    if (completedSet.has(num)) {
-      await sb.from('progress').delete().eq('user_id', currentUser.id).eq('module_number', num);
-      completedSet.delete(num);
+  async function toggleModule(moduleId) {
+    if (completedSet.has(moduleId)) {
+      await sb.from('progress').delete().eq('user_id', currentUser.id).eq('module_id', moduleId);
+      completedSet.delete(moduleId);
     } else {
-      await sb.from('progress').insert({ user_id: currentUser.id, module_number: num });
-      completedSet.add(num);
+      await sb.from('progress').insert({ user_id: currentUser.id, module_id: moduleId });
+      completedSet.add(moduleId);
     }
     renderModules();
   }
