@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard — The Edit Bay</title>
-<link rel="icon" type="image/png" href="favicon.png">
+<link rel="icon" type="image/png" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -106,6 +106,21 @@
     padding:11px 20px; border-radius:8px; cursor:pointer; white-space:nowrap;
   }
   .challenge-btn:hover{background:var(--scope-cyan); color:#14151A;}
+
+  /* ---- Community card ---- */
+  .community-card{
+    background:var(--panel); border:1px solid var(--panel-line); border-radius:12px;
+    padding:24px 26px; margin-top:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;
+  }
+  .community-card h2{font-size:1.1rem; font-weight:700; margin-bottom:6px;}
+  .community-card p{font-size:13.5px; color:var(--text-dim); line-height:1.5; max-width:52ch;}
+  .community-btn{
+    background:none; border:1px solid var(--panel-line); color:var(--text);
+    font-family:'Poppins', sans-serif; font-weight:700; font-size:13px;
+    padding:11px 20px; border-radius:8px; cursor:pointer; white-space:nowrap;
+    text-decoration:none; display:inline-block;
+  }
+  .community-btn:hover{border-color:var(--scope-cyan); color:var(--scope-cyan);}
 
   /* ---- Course catalog ---- */
   .course-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(250px,1fr)); gap:18px;}
@@ -250,6 +265,13 @@
     label: 'Create a 30-second Fire Safety Reel',
     linkText: 'View Challenge',
     href: '#'
+  };
+
+  const COMMUNITY_GROUP = {
+    title: 'Have a question or want to learn something specific?',
+    text: "Don't hesitate to voice it out — join our Facebook group to ask questions, share your work, and connect with other students.",
+    linkText: 'Join the Facebook Group',
+    href: 'https://www.facebook.com/groups/tebgab/'
   };
 
   const CATEGORY_KEYWORDS = {
@@ -400,6 +422,13 @@
           '<h2>' + escapeHtml(WEEKLY_CHALLENGE.label) + '</h2>' +
         '</div>' +
         '<button class="challenge-btn" id="challenge-btn">' + escapeHtml(WEEKLY_CHALLENGE.linkText) + ' &rarr;</button>' +
+      '</div>' +
+      '<div class="community-card">' +
+        '<div>' +
+          '<h2>' + escapeHtml(COMMUNITY_GROUP.title) + '</h2>' +
+          '<p>' + escapeHtml(COMMUNITY_GROUP.text) + '</p>' +
+        '</div>' +
+        '<a class="community-btn" href="' + COMMUNITY_GROUP.href + '" target="_blank" rel="noopener">' + escapeHtml(COMMUNITY_GROUP.linkText) + ' &rarr;</a>' +
       '</div>';
 
     if (continueTarget) {
