@@ -196,7 +196,14 @@
     const email = document.getElementById('signup-email').value.trim();
     const password = document.getElementById('signup-password').value;
 
-    const { data, error } = await sb.auth.signUp({ email, password });
+    const { data, error } = await sb.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name: fullName, fire_station: fireStation },
+        emailRedirectTo: window.location.origin + '/index.html'
+      }
+    });
 
     if (error) {
       status.className = 'status error';
@@ -205,26 +212,10 @@
       return;
     }
 
-    // Save the profile info (name + fire station) alongside the new account
-    const userId = data.user ? data.user.id : null;
-    if (userId) {
-      const { error: profileError } = await sb.from('profiles').insert({
-        id: userId,
-        full_name: fullName,
-        fire_station: fireStation
-      });
-      if (profileError) {
-        status.className = 'status error';
-        status.textContent = 'Account created, but profile save failed: ' + profileError.message;
-        btn.disabled = false;
-        return;
-      }
-    }
-
     if (data.session) {
       window.location.href = 'dashboard.html';
     } else {
-      status.textContent = 'Account created — check your email to confirm before logging in.';
+      status.textContent = "Account created — check your email and click the confirmation link to activate your account.";
       btn.disabled = false;
     }
   });
