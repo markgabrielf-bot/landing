@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Edit Bay — Video Editing &amp; Design Course</title>
+<title>The Edit Bay — Video Editing &amp; Photography for Firefighters</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg: #14151A;
@@ -22,87 +22,99 @@
   body{
     background:var(--bg);
     color:var(--text);
-    font-family:'Inter', sans-serif;
+    font-family:'Poppins', sans-serif;
     -webkit-font-smoothing:antialiased;
   }
-  .mono{font-family:'IBM Plex Mono', monospace;}
-  .display{font-family:'Inter Tight', sans-serif;}
-
   a{color:inherit;}
 
-  /* ---------- Ruler / timecode bar ---------- */
-  .ruler{
+  .topbar{
     display:flex;
     justify-content:space-between;
-    padding:14px 5vw;
+    align-items:center;
+    padding:22px 5vw;
     border-bottom:1px solid var(--panel-line);
-    font-size:11px;
-    letter-spacing:0.08em;
-    color:var(--text-dim);
   }
-  .ruler .tick{opacity:0.5;}
-  .ruler .rec{color:var(--signal-red); display:flex; align-items:center; gap:6px;}
-  .rec-dot{width:7px;height:7px;border-radius:50%;background:var(--signal-red); animation:pulse 1.6s infinite;}
-  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.25;}}
+  .brand{font-weight:800; font-size:1.1rem;}
+  .brand .accent{color:var(--signal-red);}
 
-  /* ---------- Hero ---------- */
-  .hero{
-    padding:9vh 5vw 8vh;
-    max-width:1100px;
+  .hero-wrap{
+    padding:7vh 5vw 8vh;
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:56px;
+    max-width:1200px;
+    margin:0 auto;
+    align-items:start;
   }
+  @media (max-width:860px){ .hero-wrap{grid-template-columns:1fr;} }
+
   .eyebrow{
     color:var(--scope-cyan);
     font-size:13px;
-    letter-spacing:0.12em;
+    letter-spacing:0.08em;
     text-transform:uppercase;
-    margin-bottom:22px;
+    margin-bottom:20px;
     display:block;
+    font-weight:600;
   }
   h1{
-    font-size:clamp(2.4rem, 6vw, 4.6rem);
-    line-height:1.02;
+    font-size:clamp(2.2rem, 4.6vw, 3.4rem);
+    line-height:1.08;
     font-weight:800;
-    letter-spacing:-0.02em;
-    max-width:14ch;
+    letter-spacing:-0.01em;
+    max-width:16ch;
   }
   h1 .accent{color:var(--signal-red);}
   .sub{
-    margin-top:26px;
-    max-width:52ch;
-    font-size:1.15rem;
-    line-height:1.55;
+    margin-top:22px;
+    max-width:48ch;
+    font-size:1.05rem;
+    line-height:1.6;
     color:var(--text-dim);
+    font-weight:400;
   }
-  .cta-row{
-    margin-top:40px;
-    display:flex;
-    gap:16px;
-    align-items:center;
-    flex-wrap:wrap;
-  }
-  .btn{
-    background:var(--signal-red);
-    color:#14151A;
-    border:none;
-    font-family:'Inter Tight', sans-serif;
-    font-weight:700;
-    font-size:15px;
-    padding:15px 28px;
-    border-radius:3px;
-    cursor:pointer;
-    transition:transform 0.15s ease, background 0.15s ease;
-  }
-  .btn:hover{transform:translateY(-2px); background:#ff6673;}
-  .btn:focus-visible{outline:2px solid var(--scope-cyan); outline-offset:3px;}
-  .cta-note{font-size:13px; color:var(--text-dim);}
 
-  /* ---------- Section shell ---------- */
-  section{padding:7vh 5vw; max-width:1100px;}
+  .card{
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:10px;
+    padding:36px 32px;
+  }
+  .tabs{display:flex; gap:8px; margin-bottom:22px; border-bottom:1px solid var(--panel-line);}
+  .tab{
+    background:none; border:none; color:var(--text-dim);
+    font-family:'Poppins', sans-serif; font-weight:700; font-size:14px;
+    padding:10px 4px 12px; cursor:pointer; border-bottom:2px solid transparent;
+  }
+  .tab.active{color:var(--text); border-bottom-color:var(--signal-red);}
+  form{display:none; flex-direction:column; gap:14px;}
+  form.active{display:flex;}
+  label{font-size:12px; color:var(--text-dim); letter-spacing:0.04em; text-transform:uppercase; font-weight:600;}
+  .field{display:flex; flex-direction:column; gap:6px;}
+  input{
+    background:var(--bg); border:1px solid var(--panel-line); color:var(--text);
+    font-family:'Poppins', sans-serif; font-size:15px; padding:13px 14px;
+    border-radius:8px; width:100%;
+  }
+  input:focus{outline:none; border-color:var(--scope-cyan);}
+  .btn{
+    background:var(--signal-red); color:#14151A; border:none;
+    font-family:'Poppins', sans-serif; font-weight:700; font-size:15px;
+    padding:15px 24px; border-radius:8px; cursor:pointer; margin-top:6px;
+    transition:background 0.15s ease, transform 0.15s ease;
+  }
+  .btn:hover{background:#ff6673; transform:translateY(-1px);}
+  .btn:disabled{opacity:0.6; cursor:not-allowed;}
+  .status{font-size:13px; min-height:18px; color:var(--scope-cyan); font-weight:500;}
+  .status.error{color:var(--signal-red);}
+
+  section{padding:6vh 5vw; max-width:1100px; margin:0 auto;}
   .section-label{
     font-size:12px;
     color:var(--text-dim);
-    letter-spacing:0.1em;
+    letter-spacing:0.06em;
     text-transform:uppercase;
+    font-weight:600;
     display:flex;
     align-items:center;
     gap:12px;
@@ -115,7 +127,6 @@
     background:var(--panel-line);
   }
 
-  /* ---------- Timeline / curriculum ---------- */
   .timeline{
     position:relative;
     border-top:1px solid var(--panel-line);
@@ -142,7 +153,7 @@
     width:230px;
     background:var(--panel);
     border:1px solid var(--panel-line);
-    border-radius:4px;
+    border-radius:8px;
     padding:18px 18px 20px;
     cursor:default;
     transition:border-color 0.2s ease, transform 0.2s ease;
@@ -152,13 +163,13 @@
     transform:translateY(-4px);
   }
   .clip .tc{
-    font-size:11px;
+    font-size:12px;
+    font-weight:700;
     color:var(--scope-cyan);
     margin-bottom:14px;
     display:block;
   }
   .clip h3{
-    font-family:'Inter Tight', sans-serif;
     font-size:1.05rem;
     margin-bottom:10px;
     font-weight:700;
@@ -167,9 +178,9 @@
     font-size:13.5px;
     color:var(--text-dim);
     line-height:1.5;
+    font-weight:400;
   }
 
-  /* ---------- About / instructor ---------- */
   .about-grid{
     display:grid;
     grid-template-columns:1fr 1.4fr;
@@ -180,12 +191,12 @@
   .scope{
     background:var(--panel);
     border:1px solid var(--panel-line);
-    border-radius:4px;
+    border-radius:8px;
     padding:26px;
   }
-  .scope-title{font-size:12px; color:var(--text-dim); margin-bottom:18px; letter-spacing:0.08em;}
+  .scope-title{font-size:12px; color:var(--text-dim); margin-bottom:18px; letter-spacing:0.04em; font-weight:600;}
   .bars{display:flex; align-items:flex-end; gap:6px; height:90px;}
-  .bar{flex:1; background:var(--scope-cyan); border-radius:2px 2px 0 0; opacity:0.85;}
+  .bar{flex:1; background:var(--scope-cyan); border-radius:4px 4px 0 0; opacity:0.85;}
   .bar:nth-child(3n){background:var(--signal-red);}
   .bar:nth-child(5n){background:var(--warn-amber);}
   .about p{
@@ -193,47 +204,9 @@
     line-height:1.7;
     color:var(--text-dim);
     margin-bottom:16px;
+    font-weight:400;
   }
   .about strong{color:var(--text); font-weight:600;}
-
-  /* ---------- Signup ---------- */
-  .signup-panel{
-    background:var(--panel);
-    border:1px solid var(--panel-line);
-    border-radius:6px;
-    padding:44px 5vw;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:48px;
-  }
-  @media (max-width:720px){ .signup-panel{grid-template-columns:1fr; padding:32px 24px;} }
-  .signup-copy h2{
-    font-family:'Inter Tight', sans-serif;
-    font-size:1.9rem;
-    margin-bottom:16px;
-    font-weight:700;
-  }
-  .signup-copy p{color:var(--text-dim); line-height:1.6; font-size:0.98rem;}
-  form{display:flex; flex-direction:column; gap:14px;}
-  label{
-    font-size:12px;
-    color:var(--text-dim);
-    letter-spacing:0.06em;
-    text-transform:uppercase;
-  }
-  input{
-    background:var(--bg);
-    border:1px solid var(--panel-line);
-    color:var(--text);
-    font-family:'Inter', sans-serif;
-    font-size:15px;
-    padding:13px 14px;
-    border-radius:3px;
-    width:100%;
-  }
-  input:focus{outline:none; border-color:var(--scope-cyan);}
-  .field{display:flex; flex-direction:column; gap:6px;}
-  .form-status{font-size:13px; color:var(--scope-cyan); min-height:18px;}
 
   footer{
     padding:36px 5vw 50px;
@@ -244,86 +217,124 @@
     gap:12px;
     font-size:12.5px;
     color:var(--text-dim);
+    max-width:1100px;
+    margin:0 auto;
   }
 
   @media (prefers-reduced-motion: reduce){
-    .rec-dot{animation:none;}
     *{transition:none !important;}
   }
 </style>
 </head>
 <body>
 
-  <div class="ruler mono">
-    <span class="tick">00:00:00:00</span>
-    <a href="login.html" style="text-decoration:none; color:var(--text-dim); border-bottom:1px solid var(--panel-line); padding-bottom:2px;">Already enrolled? Log in &rarr;</a>
-    <span class="rec"><span class="rec-dot"></span> ENROLLMENT OPEN</span>
+  <div class="topbar">
+    <span class="brand">THE EDIT <span class="accent">BAY</span></span>
   </div>
 
-  <div class="hero">
-    <span class="eyebrow mono">A course for firefighters</span>
-    <h1>Shoot it.<br>Cut it. <span class="accent">Show</span><br>it right.</h1>
-    <p class="sub">A hands-on video editing and photography course built for firefighters —
-      learn to capture and edit your station's footage and photos like a pro,
-      no prior experience needed.</p>
-    <div class="cta-row">
-      <button class="btn" onclick="document.getElementById('join').scrollIntoView()">Join the waitlist</button>
-      <span class="cta-note">Early access opens soon — no cost to join the list.</span>
+  <div class="hero-wrap">
+    <div>
+      <span class="eyebrow">A course for firefighters</span>
+      <h1>Shoot it.<br>Cut it. <span class="accent">Show</span><br>it right.</h1>
+      <p class="sub">A hands-on video editing and photography course built for firefighters —
+        learn to capture and edit your station's footage and photos like a pro,
+        no prior experience needed.</p>
+    </div>
+
+    <div class="card">
+      <div class="tabs">
+        <button class="tab active" id="tab-login">Log In</button>
+        <button class="tab" id="tab-signup">Create Account</button>
+      </div>
+
+      <form id="login-form" class="active">
+        <div class="field">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" required placeholder="you@email.com">
+        </div>
+        <div class="field">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn" id="login-btn">Log In</button>
+        <div class="status" id="login-status"></div>
+      </form>
+
+      <form id="signup-form">
+        <div class="field">
+          <label for="signup-name">Full Name</label>
+          <input type="text" id="signup-name" required placeholder="Juan Dela Cruz">
+        </div>
+        <div class="field">
+          <label for="signup-station">Fire Station</label>
+          <input type="text" id="signup-station" required placeholder="e.g. BFP Tacloban City Fire Station">
+        </div>
+        <div class="field">
+          <label for="signup-email">Email</label>
+          <input type="email" id="signup-email" required placeholder="you@email.com">
+        </div>
+        <div class="field">
+          <label for="signup-password">Password</label>
+          <input type="password" id="signup-password" required placeholder="At least 6 characters" minlength="6">
+        </div>
+        <button type="submit" class="btn" id="signup-btn">Create Account</button>
+        <div class="status" id="signup-status"></div>
+      </form>
     </div>
   </div>
 
   <section>
-    <span class="section-label mono">Curriculum — 10 modules</span>
+    <span class="section-label">Curriculum — 10 modules</span>
     <div class="timeline">
       <div class="playhead"></div>
       <div class="track">
         <div class="clip">
-          <span class="tc mono">MOD 01</span>
+          <span class="tc">MOD 01</span>
           <h3>Introduction &amp; Interface</h3>
           <p>Getting familiar with the editing software layout, panels, and where everything lives.</p>
         </div>
         <div class="clip">
-          <span class="tc mono">MOD 02</span>
+          <span class="tc">MOD 02</span>
           <h3>Importing Media</h3>
           <p>Bringing in footage and photos from your phone or camera and organizing them before you start cutting.</p>
         </div>
         <div class="clip">
-          <span class="tc mono">MOD 03</span>
+          <span class="tc">MOD 03</span>
           <h3>Basic Editing</h3>
           <p>Cutting, trimming, and arranging clips into a rough sequence.</p>
         </div>
         <div class="clip">
-          <span class="tc mono">MOD 04</span>
+          <span class="tc">MOD 04</span>
           <h3>Audio Editing</h3>
           <p>Adjusting levels, cleaning up sound, and syncing audio to video.</p>
         </div>
         <div class="clip">
-          <span class="tc mono">MOD 05</span>
+          <span class="tc">MOD 05</span>
           <h3>Text &amp; Titles</h3>
           <p>Adding captions, lower-thirds, and on-screen text that's easy to read.</p>
         </div>
         <div class="clip">
-          <span class="tc mono">MOD 06</span>
+          <span class="tc">MOD 06</span>
           <h3>Transitions</h3>
           <p>Using cuts and transitions to move smoothly between shots.</p>
         </div>
         <div class="clip">
-          <span class="tc mono">MOD 07</span>
+          <span class="tc">MOD 07</span>
           <h3>Effects &amp; Filters</h3>
           <p>Applying color adjustments and filters to make footage look consistent.</p>
         </div>
         <div class="clip">
-          <span class="tc mono">MOD 08</span>
+          <span class="tc">MOD 08</span>
           <h3>Overlays &amp; Animation</h3>
           <p>Adding simple graphics, logos, and animated elements on top of the footage.</p>
         </div>
         <div class="clip">
-          <span class="tc mono">MOD 09</span>
+          <span class="tc">MOD 09</span>
           <h3>Exporting</h3>
           <p>Choosing the right settings to export a finished video for social media or presentations.</p>
         </div>
         <div class="clip">
-          <span class="tc mono">MOD 10</span>
+          <span class="tc">MOD 10</span>
           <h3>Final Project</h3>
           <p>Putting it all together in one complete edited video from start to finish.</p>
         </div>
@@ -332,10 +343,10 @@
   </section>
 
   <section class="about">
-    <span class="section-label mono">Why this course</span>
+    <span class="section-label">Why this course</span>
     <div class="about-grid">
       <div class="scope">
-        <div class="scope-title mono">SIGNAL // WORKFLOW</div>
+        <div class="scope-title">SIGNAL // WORKFLOW</div>
         <div class="bars" id="bars"></div>
       </div>
       <div>
@@ -352,44 +363,17 @@
     </div>
   </section>
 
-  <section id="join">
-    <span class="section-label mono">Get early access</span>
-    <div class="signup-panel">
-      <div class="signup-copy">
-        <h2>Be first in the room.</h2>
-        <p>Drop your name and email and you'll get notified the moment enrollment
-          opens, plus a heads-up on early-bird pricing before it goes public.</p>
-      </div>
-      <div class="form-status mono" data-fs-success></div>
-      <form id="signup-form">
-        <div class="field">
-          <label for="name">Name</label>
-          <input type="text" id="name" name="name" required placeholder="Juan Dela Cruz" data-fs-field>
-          <span class="form-status mono" data-fs-error="name"></span>
-        </div>
-        <div class="field">
-          <label for="station">Fire Station</label>
-          <input type="text" id="station" name="station" required placeholder="e.g. BFP Tacloban City Fire Station" data-fs-field>
-          <span class="form-status mono" data-fs-error="station"></span>
-        </div>
-        <div class="field">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" required placeholder="you@email.com" data-fs-field>
-          <span class="form-status mono" data-fs-error="email"></span>
-        </div>
-        <button type="submit" class="btn" style="margin-top:6px;" data-fs-submit-btn>Notify me</button>
-        <div class="form-status mono" data-fs-error></div>
-      </form>
-    </div>
-  </section>
-
-  <footer class="mono">
+  <footer>
     <span>THE EDIT BAY © 2026 — FOR BFP FIREFIGHTERS</span>
     <span>PREMIERE · RESOLVE · PHOTOSHOP · CAPCUT</span>
   </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // decorative scope bars
+  const SUPABASE_URL = 'https://jayrwrnlndlavmxywazz.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpheXJ3cm5sbmRsYXZteHl3YXp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUxNDIwODgsImV4cCI6MjEwMDcxODA4OH0.lRSNGUf_sKE2vzy39zT1BYGUnHH-bXWiR1GnxOCgJpQ';
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
   const bars = document.getElementById('bars');
   for(let i=0;i<24;i++){
     const b = document.createElement('div');
@@ -398,11 +382,91 @@
     bars.appendChild(b);
   }
 
-  // Formspree AJAX submission
-  window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
-  formspree('initForm', { formElement: '#signup-form', formId: 'xdaqydzq' });
+  sb.auth.getSession().then(({ data }) => {
+    if (data.session) window.location.href = 'dashboard.html';
+  });
+
+  const tabLogin = document.getElementById('tab-login');
+  const tabSignup = document.getElementById('tab-signup');
+  const loginForm = document.getElementById('login-form');
+  const signupForm = document.getElementById('signup-form');
+
+  tabLogin.addEventListener('click', () => {
+    tabLogin.classList.add('active'); tabSignup.classList.remove('active');
+    loginForm.classList.add('active'); signupForm.classList.remove('active');
+  });
+  tabSignup.addEventListener('click', () => {
+    tabSignup.classList.add('active'); tabLogin.classList.remove('active');
+    signupForm.classList.add('active'); loginForm.classList.remove('active');
+  });
+
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('login-btn');
+    const status = document.getElementById('login-status');
+    btn.disabled = true;
+    status.className = 'status';
+    status.textContent = 'Logging in...';
+
+    const { error } = await sb.auth.signInWithPassword({
+      email: document.getElementById('login-email').value.trim(),
+      password: document.getElementById('login-password').value
+    });
+
+    if (error) {
+      status.className = 'status error';
+      status.textContent = error.message;
+      btn.disabled = false;
+    } else {
+      window.location.href = 'dashboard.html';
+    }
+  });
+
+  signupForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('signup-btn');
+    const status = document.getElementById('signup-status');
+    btn.disabled = true;
+    status.className = 'status';
+    status.textContent = 'Creating your account...';
+
+    const fullName = document.getElementById('signup-name').value.trim();
+    const fireStation = document.getElementById('signup-station').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const password = document.getElementById('signup-password').value;
+
+    const { data, error } = await sb.auth.signUp({ email, password });
+
+    if (error) {
+      status.className = 'status error';
+      status.textContent = error.message;
+      btn.disabled = false;
+      return;
+    }
+
+    const userId = data.user ? data.user.id : null;
+    if (userId) {
+      const { error: profileError } = await sb.from('profiles').insert({
+        id: userId,
+        full_name: fullName,
+        fire_station: fireStation
+      });
+      if (profileError) {
+        status.className = 'status error';
+        status.textContent = 'Account created, but profile save failed: ' + profileError.message;
+        btn.disabled = false;
+        return;
+      }
+    }
+
+    if (data.session) {
+      window.location.href = 'dashboard.html';
+    } else {
+      status.textContent = 'Account created — check your email to confirm before logging in.';
+      btn.disabled = false;
+    }
+  });
 </script>
-<script src="https://unpkg.com/@formspree/ajax@1" defer></script>
 
 </body>
 </html>

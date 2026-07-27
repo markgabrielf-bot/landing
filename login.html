@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Log In — The Edit Bay</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg: #14151A;
@@ -20,14 +20,13 @@
   body{
     background:var(--bg);
     color:var(--text);
-    font-family:'Inter', sans-serif;
+    font-family:'Poppins', sans-serif;
     min-height:100vh;
     display:flex;
     align-items:center;
     justify-content:center;
     padding:24px;
   }
-  .mono{font-family:'IBM Plex Mono', monospace;}
   .card{
     width:100%;
     max-width:420px;
@@ -45,7 +44,7 @@
     margin-bottom:14px;
   }
   h1{
-    font-family:'Inter Tight', sans-serif;
+    font-family:'Poppins', sans-serif;
     font-size:1.7rem;
     font-weight:700;
     margin-bottom:8px;
@@ -54,7 +53,7 @@
   .tabs{display:flex; gap:8px; margin-bottom:24px; border-bottom:1px solid var(--panel-line);}
   .tab{
     background:none; border:none; color:var(--text-dim);
-    font-family:'Inter Tight', sans-serif; font-weight:700; font-size:14px;
+    font-family:'Poppins', sans-serif; font-weight:700; font-size:14px;
     padding:10px 4px 12px; cursor:pointer; border-bottom:2px solid transparent;
   }
   .tab.active{color:var(--text); border-bottom-color:var(--signal-red);}
@@ -70,7 +69,7 @@
   input:focus{outline:none; border-color:var(--scope-cyan);}
   .btn{
     background:var(--signal-red); color:#14151A; border:none;
-    font-family:'Inter Tight', sans-serif; font-weight:700; font-size:15px;
+    font-family:'Poppins', sans-serif; font-weight:700; font-size:15px;
     padding:15px 24px; border-radius:3px; cursor:pointer; margin-top:6px;
     transition:background 0.15s ease;
   }
@@ -88,7 +87,7 @@
 <body>
 
   <div class="card">
-    <span class="eyebrow mono">The Edit Bay</span>
+    <span class="eyebrow">The Edit Bay</span>
     <h1>Course access</h1>
     <p class="tagline">Log in with your registered account, or create one if you were invited to enroll.</p>
 
@@ -107,7 +106,7 @@
         <input type="password" id="login-password" required placeholder="••••••••">
       </div>
       <button type="submit" class="btn" id="login-btn">Log In</button>
-      <div class="status mono" id="login-status"></div>
+      <div class="status" id="login-status"></div>
     </form>
 
     <form id="signup-form">
@@ -128,10 +127,10 @@
         <input type="password" id="signup-password" required placeholder="At least 6 characters" minlength="6">
       </div>
       <button type="submit" class="btn" id="signup-btn">Create Account</button>
-      <div class="status mono" id="signup-status"></div>
+      <div class="status" id="signup-status"></div>
     </form>
 
-    <a class="back-link mono" href="index.html">&larr; Back to main site</a>
+    <a class="back-link" href="index.html">&larr; Back to main site</a>
   </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -166,7 +165,7 @@
     const btn = document.getElementById('login-btn');
     const status = document.getElementById('login-status');
     btn.disabled = true;
-    status.className = 'status mono';
+    status.className = 'status';
     status.textContent = 'Logging in...';
 
     const { error } = await sb.auth.signInWithPassword({
@@ -175,7 +174,7 @@
     });
 
     if (error) {
-      status.className = 'status mono error';
+      status.className = 'status error';
       status.textContent = error.message;
       btn.disabled = false;
     } else {
@@ -189,7 +188,7 @@
     const btn = document.getElementById('signup-btn');
     const status = document.getElementById('signup-status');
     btn.disabled = true;
-    status.className = 'status mono';
+    status.className = 'status';
     status.textContent = 'Creating your account...';
 
     const fullName = document.getElementById('signup-name').value.trim();
@@ -200,7 +199,7 @@
     const { data, error } = await sb.auth.signUp({ email, password });
 
     if (error) {
-      status.className = 'status mono error';
+      status.className = 'status error';
       status.textContent = error.message;
       btn.disabled = false;
       return;
@@ -215,7 +214,7 @@
         fire_station: fireStation
       });
       if (profileError) {
-        status.className = 'status mono error';
+        status.className = 'status error';
         status.textContent = 'Account created, but profile save failed: ' + profileError.message;
         btn.disabled = false;
         return;
