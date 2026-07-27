@@ -40,6 +40,71 @@
   .back-link{color:var(--text-dim); text-decoration:none; font-size:13px; font-weight:600; background:none; border:none; cursor:pointer; font-family:'Poppins', sans-serif; margin-bottom:22px; display:inline-block;}
   .back-link:hover{color:var(--text);}
 
+  /* ---- Stats row ---- */
+  .stats-row{display:flex; gap:14px; margin-bottom:34px; flex-wrap:wrap;}
+  .stat-pill{
+    background:var(--panel); border:1px solid var(--panel-line); border-radius:10px;
+    padding:14px 22px; flex:1; min-width:140px;
+  }
+  .stat-pill .stat-num{font-size:1.5rem; font-weight:800; color:var(--scope-cyan);}
+  .stat-pill .stat-label{font-size:12px; color:var(--text-dim); font-weight:600; margin-top:2px;}
+
+  /* ---- Continue learning card ---- */
+  .continue-card{
+    background:var(--panel); border:1px solid var(--panel-line); border-radius:12px;
+    padding:24px 26px; margin-bottom:36px;
+  }
+  .continue-eyebrow{font-size:11px; font-weight:700; letter-spacing:0.08em; color:var(--scope-cyan); text-transform:uppercase; margin-bottom:10px;}
+  .continue-card h2{font-size:1.25rem; font-weight:700; margin-bottom:2px;}
+  .continue-card .continue-module{font-size:13.5px; color:var(--text-dim); margin-bottom:16px;}
+  .continue-progress-shell{background:var(--bg); border-radius:6px; padding:3px; margin-bottom:14px;}
+  .continue-progress-bar{height:8px; background:var(--scope-cyan); border-radius:5px; width:0%; transition:width 0.3s ease;}
+  .continue-footer{display:flex; justify-content:space-between; align-items:center;}
+  .continue-pct{font-size:12px; color:var(--text-dim); font-weight:600;}
+  .continue-btn{
+    background:var(--scope-cyan); color:#14151A; border:none;
+    font-family:'Poppins', sans-serif; font-weight:700; font-size:13px;
+    padding:11px 20px; border-radius:8px; cursor:pointer;
+  }
+  .continue-btn:hover{opacity:0.9;}
+
+  /* ---- Browse header / search / filters ---- */
+  .browse-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px;}
+  .browse-head h2{font-size:1.3rem; font-weight:700;}
+  .search-wrap{position:relative;}
+  .search-wrap input{
+    background:var(--panel); border:1px solid var(--panel-line); color:var(--text);
+    font-family:'Poppins', sans-serif; font-size:13px; padding:10px 14px 10px 34px;
+    border-radius:8px; width:220px; outline:none;
+  }
+  .search-wrap input:focus{border-color:var(--scope-cyan);}
+  .search-wrap input::placeholder{color:var(--text-dim);}
+  .search-wrap svg{position:absolute; left:11px; top:50%; transform:translateY(-50%); pointer-events:none;}
+  .filter-row{display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap;}
+  .filter-chip{
+    background:var(--panel); border:1px solid var(--panel-line); color:var(--text-dim);
+    font-family:'Poppins', sans-serif; font-weight:600; font-size:12.5px;
+    padding:8px 16px; border-radius:20px; cursor:pointer;
+  }
+  .filter-chip:hover{color:var(--text);}
+  .filter-chip.active{background:var(--scope-cyan); color:#14151A; border-color:var(--scope-cyan);}
+  .no-results{color:var(--text-dim); padding:30px 0; text-align:center; font-size:13px;}
+
+  /* ---- Weekly challenge ---- */
+  .challenge-card{
+    background:linear-gradient(135deg, rgba(55,214,196,0.08), rgba(255,77,94,0.06));
+    border:1px solid var(--panel-line); border-radius:12px;
+    padding:24px 26px; margin-top:40px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;
+  }
+  .challenge-eyebrow{font-size:11px; font-weight:700; letter-spacing:0.08em; color:var(--signal-red); text-transform:uppercase; margin-bottom:6px;}
+  .challenge-card h2{font-size:1.15rem; font-weight:700;}
+  .challenge-btn{
+    background:none; border:1px solid var(--scope-cyan); color:var(--scope-cyan);
+    font-family:'Poppins', sans-serif; font-weight:700; font-size:13px;
+    padding:11px 20px; border-radius:8px; cursor:pointer; white-space:nowrap;
+  }
+  .challenge-btn:hover{background:var(--scope-cyan); color:#14151A;}
+
   /* ---- Course catalog ---- */
   .course-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(250px,1fr)); gap:18px;}
   .course-card{
@@ -168,12 +233,37 @@
 
   let currentUser = null;
   let currentSession = null;
+  let currentProfile = null;
   let completedSet = new Set(); // module ids
   let courses = [];
   let allModules = []; // all modules across all courses: {id, course_id, position, title, ...}
   let courseThumbUrls = {};
   let currentCourseId = null;
   let openModuleId = null;
+  let searchTerm = '';
+  let activeFilter = 'All';
+
+  // Edit this to change what shows in the Weekly Challenge banner.
+  const WEEKLY_CHALLENGE = {
+    label: 'Create a 30-second Fire Safety Reel',
+    linkText: 'View Challenge',
+    href: '#'
+  };
+
+  const CATEGORY_KEYWORDS = {
+    Photography: ['photo'],
+    Video: ['video'],
+    CapCut: ['capcut'],
+    VN: ['vn ', 'vn-', ' vn']
+  };
+
+  function getCourseCategories(course) {
+    const hay = (course.title + ' ' + (course.description || '')).toLowerCase();
+    const cats = Object.keys(CATEGORY_KEYWORDS).filter(cat =>
+      CATEGORY_KEYWORDS[cat].some(kw => hay.includes(kw))
+    );
+    return cats;
+  }
 
   function getYouTubeId(url) {
     if (!url) return null;
@@ -202,6 +292,7 @@
     const { data: profile } = await sb.from('profiles')
       .select('full_name, fire_station, is_admin')
       .eq('id', currentUser.id).single();
+    currentProfile = profile;
 
     document.getElementById('who-info').innerHTML =
       (profile ? '<strong>' + escapeHtml(profile.full_name) + '</strong><br>' + escapeHtml(profile.fire_station) : currentUser.email);
@@ -226,6 +317,28 @@
   // ============================================================
   // CATALOG VIEW
   // ============================================================
+  function courseStats(c) {
+    const modsForCourse = allModules.filter(m => m.course_id === c.id);
+    const total = modsForCourse.length;
+    const completed = modsForCourse.filter(m => completedSet.has(m.id)).length;
+    const pct = total ? Math.round((completed / total) * 100) : 0;
+    return { modsForCourse, total, completed, pct };
+  }
+
+  function findContinueTarget() {
+    // Prefer a course that's started but not finished, ranked by highest progress.
+    let best = null;
+    courses.forEach(c => {
+      const { modsForCourse, total, completed, pct } = courseStats(c);
+      if (total === 0 || pct >= 100) return;
+      if (!best || pct > best.pct) {
+        const nextModule = modsForCourse.find(m => !completedSet.has(m.id));
+        best = { course: c, nextModule, pct, completed, total };
+      }
+    });
+    return best;
+  }
+
   async function renderCatalog() {
     currentCourseId = null;
 
@@ -237,23 +350,112 @@
       }
     }));
 
-    content.innerHTML =
-      '<h1>Your courses</h1>' +
-      '<p class="sub">Pick a course to continue where you left off.</p>' +
-      '<div class="course-grid" id="course-grid"></div>';
+    // ---- Aggregate stats ----
+    const totalCourses = courses.length;
+    let totalModules = 0, totalCompleted = 0;
+    courses.forEach(c => {
+      const { total, completed } = courseStats(c);
+      totalModules += total;
+      totalCompleted += completed;
+    });
+    const overallPct = totalModules ? Math.round((totalCompleted / totalModules) * 100) : 0;
 
+    // ---- Continue learning target ----
+    const continueTarget = findContinueTarget();
+    const continueHtml = continueTarget ?
+      '<div class="continue-card" id="continue-card">' +
+        '<div class="continue-eyebrow">Continue Learning</div>' +
+        '<h2>' + escapeHtml(continueTarget.course.title) + '</h2>' +
+        '<div class="continue-module">' + (continueTarget.nextModule ? escapeHtml(continueTarget.nextModule.title || 'Untitled Module') : 'Up next') + '</div>' +
+        '<div class="continue-progress-shell"><div class="continue-progress-bar" style="width:' + continueTarget.pct + '%;"></div></div>' +
+        '<div class="continue-footer">' +
+          '<span class="continue-pct">' + continueTarget.completed + ' / ' + continueTarget.total + ' modules &middot; ' + continueTarget.pct + '%</span>' +
+          '<button class="continue-btn" id="continue-btn">Continue Learning &rarr;</button>' +
+        '</div>' +
+      '</div>' : '';
+
+    content.innerHTML =
+      '<h1>Welcome back' + (currentProfile && currentProfile.full_name ? ', ' + escapeHtml(currentProfile.full_name.split(' ')[0]) : '') + ' \uD83D\uDC4B</h1>' +
+      '<p class="sub">Ready to create something today?</p>' +
+      '<div class="stats-row">' +
+        '<div class="stat-pill"><div class="stat-num">' + totalCourses + '</div><div class="stat-label">Courses</div></div>' +
+        '<div class="stat-pill"><div class="stat-num">' + overallPct + '%</div><div class="stat-label">Overall Progress</div></div>' +
+        '<div class="stat-pill"><div class="stat-num">' + totalCompleted + '</div><div class="stat-label">Completed</div></div>' +
+      '</div>' +
+      continueHtml +
+      '<div class="browse-head">' +
+        '<h2>Browse Courses</h2>' +
+        '<div class="search-wrap">' +
+          '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9AA0AC" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>' +
+          '<input type="text" id="course-search" placeholder="Search courses" value="' + escapeHtml(searchTerm) + '">' +
+        '</div>' +
+      '</div>' +
+      '<div class="filter-row" id="filter-row"></div>' +
+      '<div class="course-grid" id="course-grid"></div>' +
+      '<div class="challenge-card">' +
+        '<div>' +
+          '<div class="challenge-eyebrow">\uD83C\uDFAF Weekly Challenge</div>' +
+          '<h2>' + escapeHtml(WEEKLY_CHALLENGE.label) + '</h2>' +
+        '</div>' +
+        '<button class="challenge-btn" id="challenge-btn">' + escapeHtml(WEEKLY_CHALLENGE.linkText) + ' &rarr;</button>' +
+      '</div>';
+
+    if (continueTarget) {
+      document.getElementById('continue-btn').addEventListener('click', () => renderCourseDetail(continueTarget.course.id));
+    }
+    document.getElementById('challenge-btn').addEventListener('click', () => {
+      if (WEEKLY_CHALLENGE.href && WEEKLY_CHALLENGE.href !== '#') window.location.href = WEEKLY_CHALLENGE.href;
+    });
+
+    // ---- Filter chips ----
+    const filterRow = document.getElementById('filter-row');
+    const allCats = new Set();
+    courses.forEach(c => getCourseCategories(c).forEach(cat => allCats.add(cat)));
+    const chips = ['All', ...Object.keys(CATEGORY_KEYWORDS).filter(cat => allCats.has(cat))];
+    filterRow.innerHTML = chips.map(chip =>
+      '<button class="filter-chip' + (activeFilter === chip ? ' active' : '') + '" data-chip="' + escapeHtml(chip) + '">' + escapeHtml(chip) + '</button>'
+    ).join('');
+    filterRow.querySelectorAll('.filter-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeFilter = btn.dataset.chip;
+        renderCourseGrid();
+      });
+    });
+
+    // ---- Search input ----
+    const searchInput = document.getElementById('course-search');
+    searchInput.addEventListener('input', () => {
+      searchTerm = searchInput.value;
+      renderCourseGrid();
+    });
+
+    renderCourseGrid();
+  }
+
+  function renderCourseGrid() {
     const grid = document.getElementById('course-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
 
     if (courses.length === 0) {
       grid.insertAdjacentHTML('beforebegin', '<div class="empty-state">No courses have been published yet — check back soon.</div>');
       return;
     }
 
-    courses.forEach(c => {
-      const modsForCourse = allModules.filter(m => m.course_id === c.id);
-      const total = modsForCourse.length;
-      const completed = modsForCourse.filter(m => completedSet.has(m.id)).length;
-      const pct = total ? Math.round((completed / total) * 100) : 0;
+    const term = searchTerm.trim().toLowerCase();
+    const filtered = courses.filter(c => {
+      const matchesFilter = activeFilter === 'All' || getCourseCategories(c).includes(activeFilter);
+      const matchesSearch = !term || c.title.toLowerCase().includes(term) || (c.description || '').toLowerCase().includes(term);
+      return matchesFilter && matchesSearch;
+    });
+
+    if (filtered.length === 0) {
+      grid.insertAdjacentHTML('beforebegin', '<div class="no-results">No courses match your search.</div>');
+      return;
+    }
+
+    filtered.forEach(c => {
+      const { total, completed, pct } = courseStats(c);
 
       const thumb = courseThumbUrls[c.id]
         ? '<img class="course-thumb" src="' + courseThumbUrls[c.id] + '" alt="">'
