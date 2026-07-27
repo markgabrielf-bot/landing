@@ -8,13 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg: #14151A;
-    --panel: #1E2027;
-    --panel-line: #2B2E38;
-    --text: #F2F0EA;
-    --text-dim: #9AA0AC;
-    --signal-red: #FF4D5E;
-    --scope-cyan: #37D6C4;
+    --bg: #14151A; --panel: #1E2027; --panel-line: #2B2E38;
+    --text: #F2F0EA; --text-dim: #9AA0AC;
+    --signal-red: #FF4D5E; --scope-cyan: #37D6C4;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   body{background:var(--bg); color:var(--text); font-family:'Poppins', sans-serif;}
@@ -27,13 +23,14 @@
   .brand .accent{color:var(--signal-red);}
   .who{font-size:13px; color:var(--text-dim); text-align:right; font-weight:500;}
   .who strong{color:var(--text);}
-  .logout-btn{
+  .header-right{display:flex; align-items:center; gap:10px;}
+  .icon-btn{
     background:none; border:1px solid var(--panel-line); color:var(--text-dim);
     font-family:'Poppins', sans-serif; font-weight:600; font-size:12px; padding:8px 14px;
-    border-radius:8px; cursor:pointer; margin-left:16px;
+    border-radius:8px; cursor:pointer;
   }
-  .logout-btn:hover{border-color:var(--signal-red); color:var(--text);}
-  .header-right{display:flex; align-items:center;}
+  .icon-btn:hover{border-color:var(--scope-cyan); color:var(--text);}
+  .icon-btn.danger:hover{border-color:var(--signal-red);}
 
   main{padding:6vh 5vw; max-width:900px; margin:0 auto;}
   h1{font-size:2rem; font-weight:800; margin-bottom:10px;}
@@ -43,34 +40,68 @@
     background:var(--panel); border:1px solid var(--panel-line); border-radius:8px;
     padding:4px; margin-bottom:36px;
   }
-  .progress-bar{
-    height:8px; background:var(--scope-cyan); border-radius:6px; width:0%;
-    transition:width 0.3s ease;
-  }
+  .progress-bar{height:8px; background:var(--scope-cyan); border-radius:6px; width:0%; transition:width 0.3s ease;}
   .progress-label{font-size:12px; color:var(--text-dim); margin-bottom:10px; text-align:right; font-weight:600;}
 
   .module{
-    display:flex; align-items:center; gap:18px;
-    background:var(--panel); border:1px solid var(--panel-line); border-radius:8px;
-    padding:18px 20px; margin-bottom:10px;
+    background:var(--panel); border:1px solid var(--panel-line); border-radius:10px;
+    margin-bottom:10px; overflow:hidden;
   }
   .module.done{border-color:var(--scope-cyan);}
-  .module .num{
-    font-weight:700; font-size:13px; color:var(--scope-cyan);
-    width:52px; flex-shrink:0;
+  .module-head{
+    display:flex; align-items:center; gap:18px; padding:18px 20px; cursor:pointer;
   }
+  .module-head .num{font-weight:700; font-size:13px; color:var(--scope-cyan); width:52px; flex-shrink:0;}
   .module-info{flex:1;}
-  .module-info h3{font-size:1rem; font-weight:700; margin-bottom:4px;}
-  .module-info p{font-size:13px; color:var(--text-dim);}
+  .module-info h3{font-size:1rem; font-weight:700;}
+  .module-body{display:none; padding:0 20px 22px; border-top:1px solid var(--panel-line);}
+  .module-body.open{display:block; padding-top:18px;}
+  .video-wrap{position:relative; padding-bottom:56.25%; height:0; margin-bottom:16px; background:var(--bg); border-radius:8px; overflow:hidden;}
+  .video-wrap iframe{position:absolute; top:0; left:0; width:100%; height:100%; border:0;}
+  .no-video{color:var(--text-dim); font-size:13px; padding:20px; text-align:center; background:var(--bg); border-radius:8px; margin-bottom:16px;}
+  .module-desc{font-size:14px; color:var(--text-dim); line-height:1.6; margin-bottom:16px;}
+  .file-links{display:flex; flex-direction:column; gap:8px; margin-bottom:16px;}
+  .file-link{
+    display:flex; align-items:center; gap:8px; font-size:13px; color:var(--scope-cyan);
+    text-decoration:none; background:var(--bg); border:1px solid var(--panel-line);
+    border-radius:6px; padding:9px 12px;
+  }
+  .file-link:hover{border-color:var(--scope-cyan);}
   .check-btn{
-    flex-shrink:0; background:var(--bg); border:1px solid var(--panel-line);
-    color:var(--text-dim); font-family:'Poppins', sans-serif; font-weight:600; font-size:12px;
+    background:var(--bg); border:1px solid var(--panel-line); color:var(--text-dim);
+    font-family:'Poppins', sans-serif; font-weight:600; font-size:12px;
     padding:9px 16px; border-radius:8px; cursor:pointer;
   }
   .check-btn.done{background:var(--scope-cyan); color:#14151A; border-color:var(--scope-cyan);}
   .check-btn:hover{border-color:var(--scope-cyan);}
 
   .loading{color:var(--text-dim); padding:40px 0;}
+
+  /* Settings modal */
+  .modal-overlay{
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6);
+    align-items:center; justify-content:center; padding:24px; z-index:10;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal{
+    background:var(--panel); border:1px solid var(--panel-line); border-radius:10px;
+    padding:32px; max-width:420px; width:100%;
+  }
+  .modal h2{font-size:1.3rem; font-weight:700; margin-bottom:14px;}
+  .modal p{color:var(--text-dim); font-size:14px; line-height:1.6; margin-bottom:20px;}
+  .modal-actions{display:flex; gap:10px; justify-content:flex-end;}
+  .btn-cancel{
+    background:none; border:1px solid var(--panel-line); color:var(--text-dim);
+    font-family:'Poppins', sans-serif; font-weight:600; font-size:13px;
+    padding:10px 18px; border-radius:8px; cursor:pointer;
+  }
+  .btn-delete{
+    background:var(--signal-red); color:#14151A; border:none;
+    font-family:'Poppins', sans-serif; font-weight:700; font-size:13px;
+    padding:10px 18px; border-radius:8px; cursor:pointer;
+  }
+  .btn-delete:disabled{opacity:0.5; cursor:not-allowed;}
+  .modal-status{font-size:12px; color:var(--signal-red); margin-top:10px; min-height:16px;}
 </style>
 </head>
 <body>
@@ -79,7 +110,9 @@
     <span class="brand">THE EDIT <span class="accent">BAY</span></span>
     <div class="header-right">
       <span class="who" id="who-info">Loading...</span>
-      <button class="logout-btn" id="logout-btn">Log Out</button>
+      <a class="icon-btn" href="admin.html" id="admin-link" style="display:none; text-decoration:none;">Admin Panel</a>
+      <button class="icon-btn" id="settings-btn">Settings</button>
+      <button class="icon-btn" id="logout-btn">Log Out</button>
     </div>
   </header>
 
@@ -88,7 +121,7 @@
 
     <div id="content" style="display:none;">
       <h1>Your course</h1>
-      <p class="sub">Work through the modules below in order. Mark each one complete as you finish it.</p>
+      <p class="sub">Click a module to open it. Mark each one complete as you finish it.</p>
 
       <div class="progress-label" id="progress-label">0 / 10 modules complete</div>
       <div class="progress-shell"><div class="progress-bar" id="progress-bar"></div></div>
@@ -97,84 +130,161 @@
     </div>
   </main>
 
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal">
+      <h2>Account settings</h2>
+      <p>Deleting your account permanently removes your profile and progress from the database. This can't be undone.</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="cancel-settings">Cancel</button>
+        <button class="btn-delete" id="confirm-delete">Delete My Account</button>
+      </div>
+      <div class="modal-status" id="delete-status"></div>
+    </div>
+  </div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = 'https://jayrwrnlndlavmxywazz.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpheXJ3cm5sbmRsYXZteHl3YXp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUxNDIwODgsImV4cCI6MjEwMDcxODA4OH0.lRSNGUf_sKE2vzy39zT1BYGUnHH-bXWiR1GnxOCgJpQ';
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const MODULES = [
-    { num: 1, title: 'Introduction & Interface', desc: 'Getting familiar with the editing software layout, panels, and where everything lives.' },
-    { num: 2, title: 'Importing Media', desc: 'Bringing in footage and photos from your phone or camera and organizing them before you start cutting.' },
-    { num: 3, title: 'Basic Editing', desc: 'Cutting, trimming, and arranging clips into a rough sequence.' },
-    { num: 4, title: 'Audio Editing', desc: 'Adjusting levels, cleaning up sound, and syncing audio to video.' },
-    { num: 5, title: 'Text & Titles', desc: "Adding captions, lower-thirds, and on-screen text that's easy to read." },
-    { num: 6, title: 'Transitions', desc: 'Using cuts and transitions to move smoothly between shots.' },
-    { num: 7, title: 'Effects & Filters', desc: 'Applying color adjustments and filters to make footage look consistent.' },
-    { num: 8, title: 'Overlays & Animation', desc: 'Adding simple graphics, logos, and animated elements on top of the footage.' },
-    { num: 9, title: 'Exporting', desc: 'Choosing the right settings to export a finished video for social media or presentations.' },
-    { num: 10, title: 'Final Project', desc: 'Putting it all together in one complete edited video from start to finish.' }
+  const MODULE_TITLES = [
+    'Introduction & Interface', 'Importing Media', 'Basic Editing', 'Audio Editing',
+    'Text & Titles', 'Transitions', 'Effects & Filters', 'Overlays & Animation',
+    'Exporting', 'Final Project'
   ];
 
   let currentUser = null;
+  let currentSession = null;
   let completedSet = new Set();
+  let contentByModule = {};
+  let filesByModule = {};
+  let openModule = null;
+
+  function getYouTubeId(url) {
+    if (!url) return null;
+    const patterns = [
+      /(?:youtu\.be\/)([\w-]+)/,
+      /(?:youtube\.com\/watch\?v=)([\w-]+)/,
+      /(?:youtube\.com\/embed\/)([\w-]+)/
+    ];
+    for (const p of patterns) {
+      const m = url.match(p);
+      if (m) return m[1];
+    }
+    return null;
+  }
 
   async function init() {
     const { data: { session } } = await sb.auth.getSession();
-    if (!session) {
-      window.location.href = 'index.html';
-      return;
-    }
+    if (!session) { window.location.href = 'index.html'; return; }
     currentUser = session.user;
+    currentSession = session;
 
-    // Load profile (name + station)
     const { data: profile } = await sb.from('profiles')
-      .select('full_name, fire_station')
-      .eq('id', currentUser.id)
-      .single();
+      .select('full_name, fire_station, is_admin')
+      .eq('id', currentUser.id).single();
 
     document.getElementById('who-info').innerHTML =
       (profile ? '<strong>' + profile.full_name + '</strong><br>' + profile.fire_station : currentUser.email);
 
-    // Load progress
-    const { data: progressRows } = await sb.from('progress')
-      .select('module_number')
-      .eq('user_id', currentUser.id);
+    if (profile && profile.is_admin) {
+      document.getElementById('admin-link').style.display = 'inline-block';
+    }
 
+    const { data: progressRows } = await sb.from('progress').select('module_number').eq('user_id', currentUser.id);
     completedSet = new Set((progressRows || []).map(r => r.module_number));
+
+    const { data: contentRows } = await sb.from('course_content').select('*');
+    (contentRows || []).forEach(r => contentByModule[r.module_number] = r);
+
+    const { data: fileRows } = await sb.from('course_files').select('*').order('uploaded_at');
+    filesByModule = {};
+    (fileRows || []).forEach(f => {
+      if (!filesByModule[f.module_number]) filesByModule[f.module_number] = [];
+      filesByModule[f.module_number].push(f);
+    });
 
     renderModules();
     document.getElementById('loading').style.display = 'none';
     document.getElementById('content').style.display = 'block';
   }
 
-  function renderModules() {
+  async function renderModules() {
     const list = document.getElementById('module-list');
     list.innerHTML = '';
-    MODULES.forEach(m => {
-      const isDone = completedSet.has(m.num);
+
+    for (let i = 1; i <= 10; i++) {
+      const isDone = completedSet.has(i);
+      const c = contentByModule[i] || { youtube_url: '', description: '' };
+      const files = filesByModule[i] || [];
+      const isOpen = openModule === i;
+
       const row = document.createElement('div');
       row.className = 'module' + (isDone ? ' done' : '');
+
+      let videoHtml = '<div class="no-video">No video uploaded for this module yet.</div>';
+      const ytId = getYouTubeId(c.youtube_url);
+      if (ytId) {
+        videoHtml = '<div class="video-wrap"><iframe src="https://www.youtube.com/embed/' + ytId +
+          '" allowfullscreen></iframe></div>';
+      }
+
+      let filesHtml = '';
+      if (files.length) {
+        filesHtml = '<div class="file-links">' + files.map(f =>
+          '<a class="file-link" href="#" data-path="' + f.file_path + '">' + f.file_name + '</a>'
+        ).join('') + '</div>';
+      }
+
       row.innerHTML =
-        '<span class="num">MOD ' + String(m.num).padStart(2, '0') + '</span>' +
-        '<div class="module-info"><h3>' + m.title + '</h3><p>' + m.desc + '</p></div>' +
-        '<button class="check-btn' + (isDone ? ' done' : '') + '" data-mod="' + m.num + '">' +
-        (isDone ? 'Completed' : 'Mark complete') + '</button>';
+        '<div class="module-head" data-toggle="' + i + '">' +
+          '<span class="num">MOD ' + String(i).padStart(2,'0') + '</span>' +
+          '<div class="module-info"><h3>' + MODULE_TITLES[i-1] + '</h3></div>' +
+          '<button class="check-btn' + (isDone ? ' done' : '') + '" data-mod="' + i + '">' +
+            (isDone ? 'Completed' : 'Mark complete') + '</button>' +
+        '</div>' +
+        '<div class="module-body' + (isOpen ? ' open' : '') + '" id="body-' + i + '">' +
+          videoHtml +
+          (c.description ? '<p class="module-desc">' + c.description + '</p>' : '') +
+          filesHtml +
+        '</div>';
+
       list.appendChild(row);
+    }
+
+    document.querySelectorAll('.module-head').forEach(head => {
+      head.addEventListener('click', (e) => {
+        if (e.target.classList.contains('check-btn')) return;
+        const num = parseInt(head.dataset.toggle, 10);
+        openModule = (openModule === num) ? null : num;
+        renderModules();
+      });
     });
 
     document.querySelectorAll('.check-btn').forEach(btn => {
-      btn.addEventListener('click', () => toggleModule(parseInt(btn.dataset.mod, 10)));
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleModule(parseInt(btn.dataset.mod, 10));
+      });
+    });
+
+    document.querySelectorAll('.file-link').forEach(link => {
+      link.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const path = link.dataset.path;
+        const { data, error } = await sb.storage.from('course-files').createSignedUrl(path, 3600);
+        if (!error && data) window.open(data.signedUrl, '_blank');
+      });
     });
 
     updateProgressBar();
   }
 
   function updateProgressBar() {
-    const pct = Math.round((completedSet.size / MODULES.length) * 100);
+    const pct = Math.round((completedSet.size / 10) * 100);
     document.getElementById('progress-bar').style.width = pct + '%';
-    document.getElementById('progress-label').textContent =
-      completedSet.size + ' / ' + MODULES.length + ' modules complete';
+    document.getElementById('progress-label').textContent = completedSet.size + ' / 10 modules complete';
   }
 
   async function toggleModule(num) {
@@ -191,6 +301,39 @@
   document.getElementById('logout-btn').addEventListener('click', async () => {
     await sb.auth.signOut();
     window.location.href = 'index.html';
+  });
+
+  // Settings / delete account
+  const settingsModal = document.getElementById('settings-modal');
+  document.getElementById('settings-btn').addEventListener('click', () => settingsModal.classList.add('open'));
+  document.getElementById('cancel-settings').addEventListener('click', () => settingsModal.classList.remove('open'));
+
+  document.getElementById('confirm-delete').addEventListener('click', async () => {
+    const btn = document.getElementById('confirm-delete');
+    const status = document.getElementById('delete-status');
+    btn.disabled = true;
+    status.textContent = 'Deleting your account...';
+
+    try {
+      const res = await fetch(SUPABASE_URL + '/functions/v1/delete-account', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + currentSession.access_token,
+          'apikey': SUPABASE_ANON_KEY
+        }
+      });
+      const result = await res.json();
+      if (!res.ok) {
+        status.textContent = result.error || 'Something went wrong.';
+        btn.disabled = false;
+        return;
+      }
+      await sb.auth.signOut();
+      window.location.href = 'index.html';
+    } catch (err) {
+      status.textContent = 'Something went wrong. Please try again.';
+      btn.disabled = false;
+    }
   });
 
   init();
