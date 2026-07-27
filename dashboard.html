@@ -21,9 +21,7 @@
     display:flex; justify-content:space-between; align-items:center;
     padding:20px 5vw; border-bottom:1px solid var(--panel-line);
   }
-  .brand{font-weight:800; font-size:1.1rem;}
   .brand-logo{height:34px; width:auto; display:block;}
-  .brand .accent{color:var(--signal-red);}
   .who{font-size:13px; color:var(--text-dim); text-align:right; font-weight:500;}
   .who strong{color:var(--text);}
   .header-right{display:flex; align-items:center; gap:10px;}
@@ -33,7 +31,6 @@
     border-radius:8px; cursor:pointer;
   }
   .icon-btn:hover{border-color:var(--scope-cyan); color:var(--text);}
-  .icon-btn.danger:hover{border-color:var(--signal-red);}
 
   main{padding:6vh 5vw; max-width:900px; margin:0 auto;}
   h1{font-size:2rem; font-weight:800; margin-bottom:10px;}
@@ -43,7 +40,6 @@
   .back-link{color:var(--text-dim); text-decoration:none; font-size:13px; font-weight:600; background:none; border:none; cursor:pointer; font-family:'Poppins', sans-serif; margin-bottom:22px; display:inline-block;}
   .back-link:hover{color:var(--text);}
 
-  /* ---- Stats row ---- */
   .stats-row{display:flex; gap:14px; margin-bottom:34px; flex-wrap:wrap;}
   .stat-pill{
     background:var(--panel); border:1px solid var(--panel-line); border-radius:10px;
@@ -52,7 +48,6 @@
   .stat-pill .stat-num{font-size:1.5rem; font-weight:800; color:var(--scope-cyan);}
   .stat-pill .stat-label{font-size:12px; color:var(--text-dim); font-weight:600; margin-top:2px;}
 
-  /* ---- Continue learning card ---- */
   .continue-card{
     background:var(--panel); border:1px solid var(--panel-line); border-radius:12px;
     padding:24px 26px; margin-bottom:36px;
@@ -71,50 +66,13 @@
   }
   .continue-btn:hover{opacity:0.9;}
 
-  /* ---- Browse header / search / filters ---- */
-  .browse-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px;}
-  .browse-head h2{font-size:1.3rem; font-weight:700;}
-  .search-wrap{position:relative;}
-  .search-wrap input{
-    background:var(--panel); border:1px solid var(--panel-line); color:var(--text);
-    font-family:'Poppins', sans-serif; font-size:13px; padding:10px 14px 10px 34px;
-    border-radius:8px; width:220px; outline:none;
-  }
-  .search-wrap input:focus{border-color:var(--scope-cyan);}
-  .search-wrap input::placeholder{color:var(--text-dim);}
-  .search-wrap svg{position:absolute; left:11px; top:50%; transform:translateY(-50%); pointer-events:none;}
-  .filter-row{display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap;}
-  .filter-chip{
-    background:var(--panel); border:1px solid var(--panel-line); color:var(--text-dim);
-    font-family:'Poppins', sans-serif; font-weight:600; font-size:12.5px;
-    padding:8px 16px; border-radius:20px; cursor:pointer;
-  }
-  .filter-chip:hover{color:var(--text);}
-  .filter-chip.active{background:var(--scope-cyan); color:#14151A; border-color:var(--scope-cyan);}
-  .no-results{color:var(--text-dim); padding:30px 0; text-align:center; font-size:13px;}
-
-  /* ---- Weekly challenge ---- */
-  .challenge-card{
-    background:linear-gradient(135deg, rgba(55,214,196,0.08), rgba(255,77,94,0.06));
-    border:1px solid var(--panel-line); border-radius:12px;
-    padding:24px 26px; margin-top:40px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;
-  }
-  .challenge-eyebrow{font-size:11px; font-weight:700; letter-spacing:0.08em; color:var(--signal-red); text-transform:uppercase; margin-bottom:6px;}
-  .challenge-card h2{font-size:1.15rem; font-weight:700;}
-  .challenge-btn{
-    background:none; border:1px solid var(--scope-cyan); color:var(--scope-cyan);
-    font-family:'Poppins', sans-serif; font-weight:700; font-size:13px;
-    padding:11px 20px; border-radius:8px; cursor:pointer; white-space:nowrap;
-  }
-  .challenge-btn:hover{background:var(--scope-cyan); color:#14151A;}
-
-  /* ---- Facebook Community Card ---- */
+  /* ---- FACEBOOK COMMUNITY CARD - FIXED ---- */
   .fb-community-card {
     background: linear-gradient(145deg, var(--panel), rgba(24, 119, 242, 0.08));
     border: 2px solid var(--panel-line);
     border-radius: 16px;
     padding: 28px 30px;
-    margin-top: 24px;
+    margin: 30px 0 36px 0;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -165,6 +123,7 @@
     font-size: 14px;
     color: var(--text-dim);
     line-height: 1.7;
+    margin-bottom: 14px;
   }
   .fb-community-body strong {
     color: var(--text);
@@ -172,8 +131,8 @@
   .fb-benefits {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
-    margin: 16px 0;
+    gap: 10px;
+    margin: 14px 0 18px 0;
   }
   .fb-benefit-item {
     display: flex;
@@ -195,6 +154,7 @@
     justify-content: flex-start;
     gap: 12px;
     flex-wrap: wrap;
+    margin-top: 6px;
   }
   .fb-join-btn {
     background: var(--fb-blue);
@@ -242,7 +202,41 @@
     color: var(--text);
   }
 
-  /* ---- Course catalog ---- */
+  .browse-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px;}
+  .browse-head h2{font-size:1.3rem; font-weight:700;}
+  .search-wrap{position:relative;}
+  .search-wrap input{
+    background:var(--panel); border:1px solid var(--panel-line); color:var(--text);
+    font-family:'Poppins', sans-serif; font-size:13px; padding:10px 14px 10px 34px;
+    border-radius:8px; width:220px; outline:none;
+  }
+  .search-wrap input:focus{border-color:var(--scope-cyan);}
+  .search-wrap input::placeholder{color:var(--text-dim);}
+  .search-wrap svg{position:absolute; left:11px; top:50%; transform:translateY(-50%); pointer-events:none;}
+  .filter-row{display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap;}
+  .filter-chip{
+    background:var(--panel); border:1px solid var(--panel-line); color:var(--text-dim);
+    font-family:'Poppins', sans-serif; font-weight:600; font-size:12.5px;
+    padding:8px 16px; border-radius:20px; cursor:pointer;
+  }
+  .filter-chip:hover{color:var(--text);}
+  .filter-chip.active{background:var(--scope-cyan); color:#14151A; border-color:var(--scope-cyan);}
+  .no-results{color:var(--text-dim); padding:30px 0; text-align:center; font-size:13px;}
+
+  .challenge-card{
+    background:linear-gradient(135deg, rgba(55,214,196,0.08), rgba(255,77,94,0.06));
+    border:1px solid var(--panel-line); border-radius:12px;
+    padding:24px 26px; margin-top:40px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;
+  }
+  .challenge-eyebrow{font-size:11px; font-weight:700; letter-spacing:0.08em; color:var(--signal-red); text-transform:uppercase; margin-bottom:6px;}
+  .challenge-card h2{font-size:1.15rem; font-weight:700;}
+  .challenge-btn{
+    background:none; border:1px solid var(--scope-cyan); color:var(--scope-cyan);
+    font-family:'Poppins', sans-serif; font-weight:700; font-size:13px;
+    padding:11px 20px; border-radius:8px; cursor:pointer; white-space:nowrap;
+  }
+  .challenge-btn:hover{background:var(--scope-cyan); color:#14151A;}
+
   .course-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(250px,1fr)); gap:18px;}
   .course-card{
     background:var(--panel); border:1px solid var(--panel-line); border-radius:10px;
@@ -262,7 +256,7 @@
   .course-progress-bar{height:6px; background:var(--scope-cyan); border-radius:5px; width:0%;}
   .course-progress-label{font-size:11.5px; color:var(--text-dim); font-weight:600; margin-top:6px;}
 
-  /* ---- Course detail (modules) ---- */
+  /* Course detail styles */
   .course-detail-head{margin-bottom:26px;}
   .course-detail-head h1{margin-bottom:6px;}
   .progress-shell{
@@ -271,7 +265,6 @@
   }
   .progress-bar{height:8px; background:var(--scope-cyan); border-radius:6px; width:0%; transition:width 0.3s ease;}
   .progress-label{font-size:12px; color:var(--text-dim); margin-bottom:10px; text-align:right; font-weight:600;}
-
   .module{
     background:var(--panel); border:1px solid var(--panel-line); border-radius:10px;
     margin-bottom:10px; overflow:hidden;
@@ -330,7 +323,6 @@
   .btn-delete:disabled{opacity:0.5; cursor:not-allowed;}
   .modal-status{font-size:12px; color:var(--signal-red); margin-top:10px; min-height:16px;}
 
-  /* ---- Responsive ---- */
   @media (max-width: 640px) {
     .fb-community-card { padding: 20px; }
     .fb-benefits { grid-template-columns: 1fr; }
@@ -479,7 +471,9 @@
     return best;
   }
 
-  // ---- Facebook Community HTML ----
+  // ============================================================
+  // FACEBOOK COMMUNITY HTML - FIXED VERSION
+  // ============================================================
   function getFacebookCommunityHTML() {
     return `
       <div class="fb-community-card">
@@ -490,7 +484,7 @@
             </svg>
           </div>
           <div>
-            <h2>Join Our Facebook Community</h2>
+            <h2>👥 Join Our Facebook Community</h2>
             <p>Connect with fellow students and get direct support</p>
           </div>
         </div>
@@ -525,7 +519,7 @@
             </svg>
             Join the Facebook Group
           </a>
-          <a href="#" class="fb-learn-more" onclick="alert('Join our Facebook group to ask questions, suggest new courses, share your work, and connect with other students!'); return false;">
+          <a href="#" class="fb-learn-more" onclick="alert('🎯 Join our Facebook group to:\n\n• Ask questions about your lessons\n• Suggest new courses you want\n• Share your work and get feedback\n• Request specific tutorials\n\nClick Join to be part of our community!'); return false;">
             Learn More →
           </a>
         </div>
@@ -533,6 +527,9 @@
     `;
   }
 
+  // ============================================================
+  // RENDER CATALOG - WITH FACEBOOK SECTION VISIBLE
+  // ============================================================
   async function renderCatalog() {
     currentCourseId = null;
 
@@ -562,20 +559,30 @@
         '<div class="continue-progress-shell"><div class="continue-progress-bar" style="width:' + continueTarget.pct + '%;"></div></div>' +
         '<div class="continue-footer">' +
           '<span class="continue-pct">' + continueTarget.completed + ' / ' + continueTarget.total + ' modules &middot; ' + continueTarget.pct + '%</span>' +
-          '<button class="continue-btn" id="continue-btn">Continue Learning &rarr;</button>' +
+          '<button class="continue-btn" id="continue-btn">Continue Learning →</button>' +
         '</div>' +
       '</div>' : '';
 
-    content.innerHTML =
+    // --- BUILD THE PAGE WITH FACEBOOK SECTION ---
+    content.innerHTML = 
+      // Welcome section
       '<h1>Welcome back' + (currentProfile && currentProfile.full_name ? ', ' + escapeHtml(currentProfile.full_name.split(' ')[0]) : '') + ' 👋</h1>' +
       '<p class="sub">Ready to create something today?</p>' +
+      
+      // Stats
       '<div class="stats-row">' +
         '<div class="stat-pill"><div class="stat-num">' + totalCourses + '</div><div class="stat-label">Courses</div></div>' +
         '<div class="stat-pill"><div class="stat-num">' + overallPct + '%</div><div class="stat-label">Overall Progress</div></div>' +
         '<div class="stat-pill"><div class="stat-num">' + totalCompleted + '</div><div class="stat-label">Completed</div></div>' +
       '</div>' +
+      
+      // Continue Learning
       continueHtml +
-      getFacebookCommunityHTML() +  // Facebook Community section added here!
+      
+      // ⭐ FACEBOOK COMMUNITY SECTION - RIGHT HERE ⭐
+      getFacebookCommunityHTML() +
+      
+      // Browse Courses
       '<div class="browse-head">' +
         '<h2>Browse Courses</h2>' +
         '<div class="search-wrap">' +
@@ -585,6 +592,8 @@
       '</div>' +
       '<div class="filter-row" id="filter-row"></div>' +
       '<div class="course-grid" id="course-grid"></div>' +
+      
+      // Weekly Challenge
       '<div class="challenge-card">' +
         '<div>' +
           '<div class="challenge-eyebrow">🎯 Weekly Challenge</div>' +
@@ -593,6 +602,7 @@
         '<button class="challenge-btn" id="challenge-btn">' + escapeHtml(WEEKLY_CHALLENGE.linkText) + ' →</button>' +
       '</div>';
 
+    // Event listeners
     if (continueTarget) {
       document.getElementById('continue-btn').addEventListener('click', () => renderCourseDetail(continueTarget.course.id));
     }
@@ -600,6 +610,7 @@
       if (WEEKLY_CHALLENGE.href && WEEKLY_CHALLENGE.href !== '#') window.location.href = WEEKLY_CHALLENGE.href;
     });
 
+    // Filter chips
     const filterRow = document.getElementById('filter-row');
     const allCats = new Set();
     courses.forEach(c => getCourseCategories(c).forEach(cat => allCats.add(cat)));
@@ -614,6 +625,7 @@
       });
     });
 
+    // Search
     const searchInput = document.getElementById('course-search');
     searchInput.addEventListener('input', () => {
       searchTerm = searchInput.value;
@@ -636,4 +648,198 @@
     const term = searchTerm.trim().toLowerCase();
     const filtered = courses.filter(c => {
       const matchesFilter = activeFilter === 'All' || getCourseCategories(c).includes(activeFilter);
-      const matchesSearch = !term || c.title.toLowerCase().includes(term) || (c.description || '').toLowerCase
+      const matchesSearch = !term || c.title.toLowerCase().includes(term) || (c.description || '').toLowerCase().includes(term);
+      return matchesFilter && matchesSearch;
+    });
+
+    if (filtered.length === 0) {
+      grid.insertAdjacentHTML('beforebegin', '<div class="no-results">No courses match your search.</div>');
+      return;
+    }
+
+    filtered.forEach(c => {
+      const { total, completed, pct } = courseStats(c);
+
+      const thumb = courseThumbUrls[c.id]
+        ? '<img class="course-thumb" src="' + courseThumbUrls[c.id] + '" alt="">'
+        : '<div class="course-thumb-placeholder">No thumbnail</div>';
+
+      const card = document.createElement('div');
+      card.className = 'course-card';
+      card.dataset.id = c.id;
+      card.innerHTML =
+        thumb +
+        '<div class="course-card-body">' +
+          '<h3>' + escapeHtml(c.title) + '</h3>' +
+          '<p>' + escapeHtml(c.description || '') + '</p>' +
+          '<div class="course-progress-shell"><div class="course-progress-bar" style="width:' + pct + '%;"></div></div>' +
+          '<div class="course-progress-label">' + completed + ' / ' + total + ' modules complete</div>' +
+        '</div>';
+      card.addEventListener('click', () => renderCourseDetail(c.id));
+      grid.appendChild(card);
+    });
+  }
+
+  // ============================================================
+  // COURSE DETAIL VIEW
+  // ============================================================
+  async function renderCourseDetail(courseId) {
+    currentCourseId = courseId;
+    openModuleId = null;
+    const course = courses.find(c => c.id === courseId);
+    const modsForCourse = allModules.filter(m => m.course_id === courseId).sort((a,b) => a.position - b.position);
+
+    const { data: fileRows } = await sb.from('course_files').select('*').order('uploaded_at');
+    modsForCourse.forEach(m => {
+      m.files = (fileRows || []).filter(f => f.module_id === m.id);
+    });
+
+    content.innerHTML =
+      '<button class="back-link" id="back-to-catalog">← Back to courses</button>' +
+      '<div class="course-detail-head">' +
+        '<h1>' + escapeHtml(course.title) + '</h1>' +
+        '<p class="sub">' + escapeHtml(course.description || '') + '</p>' +
+      '</div>' +
+      '<div class="progress-label" id="progress-label"></div>' +
+      '<div class="progress-shell"><div class="progress-bar" id="progress-bar"></div></div>' +
+      '<div id="module-list"></div>';
+
+    document.getElementById('back-to-catalog').addEventListener('click', renderCatalog);
+    renderModuleList(modsForCourse);
+  }
+
+  function renderModuleList(modsForCourse) {
+    const list = document.getElementById('module-list');
+    list.innerHTML = '';
+
+    if (modsForCourse.length === 0) {
+      list.innerHTML = '<div class="empty-state">No modules have been added to this course yet.</div>';
+    }
+
+    modsForCourse.forEach((m, idx) => {
+      const isDone = completedSet.has(m.id);
+      const isOpen = openModuleId === m.id;
+
+      const row = document.createElement('div');
+      row.className = 'module' + (isDone ? ' done' : '');
+
+      let videoHtml = '<div class="no-video">No video uploaded for this module yet.</div>';
+      const ytId = getYouTubeId(m.youtube_url);
+      if (ytId) {
+        videoHtml = '<div class="video-wrap"><iframe src="https://www.youtube.com/embed/' + ytId +
+          '" allowfullscreen></iframe></div>';
+      }
+
+      let filesHtml = '';
+      if (m.files && m.files.length) {
+        filesHtml = '<div class="file-links">' + m.files.map(f =>
+          '<a class="file-link" href="#" data-path="' + f.file_path + '">' + escapeHtml(f.file_name) + '</a>'
+        ).join('') + '</div>';
+      }
+
+      row.innerHTML =
+        '<div class="module-head" data-toggle="' + m.id + '">' +
+          '<span class="num">MOD ' + String(idx + 1).padStart(2,'0') + '</span>' +
+          '<div class="module-info"><h3>' + escapeHtml(m.title || 'Untitled Module') + '</h3></div>' +
+          '<button class="check-btn' + (isDone ? ' done' : '') + '" data-mod="' + m.id + '">' +
+            (isDone ? 'Completed' : 'Mark complete') + '</button>' +
+        '</div>' +
+        '<div class="module-body' + (isOpen ? ' open' : '') + '" id="body-' + m.id + '">' +
+          videoHtml +
+          (m.description ? '<p class="module-desc">' + escapeHtml(m.description) + '</p>' : '') +
+          filesHtml +
+        '</div>';
+
+      list.appendChild(row);
+    });
+
+    document.querySelectorAll('.module-head').forEach(head => {
+      head.addEventListener('click', (e) => {
+        if (e.target.classList.contains('check-btn')) return;
+        const id = parseInt(head.dataset.toggle, 10);
+        openModuleId = (openModuleId === id) ? null : id;
+        renderModuleList(modsForCourse);
+      });
+    });
+
+    document.querySelectorAll('.check-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleModule(parseInt(btn.dataset.mod, 10), modsForCourse);
+      });
+    });
+
+    document.querySelectorAll('.file-link').forEach(link => {
+      link.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const path = link.dataset.path;
+        const { data, error } = await sb.storage.from('course-files').createSignedUrl(path, 3600);
+        if (!error && data) window.open(data.signedUrl, '_blank');
+      });
+    });
+
+    updateProgressBar(modsForCourse);
+  }
+
+  function updateProgressBar(modsForCourse) {
+    const total = modsForCourse.length;
+    const completed = modsForCourse.filter(m => completedSet.has(m.id)).length;
+    const pct = total ? Math.round((completed / total) * 100) : 0;
+    document.getElementById('progress-bar').style.width = pct + '%';
+    document.getElementById('progress-label').textContent = completed + ' / ' + total + ' modules complete';
+  }
+
+  async function toggleModule(moduleId, modsForCourse) {
+    if (completedSet.has(moduleId)) {
+      await sb.from('progress').delete().eq('user_id', currentUser.id).eq('module_id', moduleId);
+      completedSet.delete(moduleId);
+    } else {
+      await sb.from('progress').insert({ user_id: currentUser.id, module_id: moduleId });
+      completedSet.add(moduleId);
+    }
+    renderModuleList(modsForCourse);
+  }
+
+  document.getElementById('logout-btn').addEventListener('click', async () => {
+    await sb.auth.signOut();
+    window.location.href = 'index.html';
+  });
+
+  // Settings / delete account
+  const settingsModal = document.getElementById('settings-modal');
+  document.getElementById('settings-btn').addEventListener('click', () => settingsModal.classList.add('open'));
+  document.getElementById('cancel-settings').addEventListener('click', () => settingsModal.classList.remove('open'));
+
+  document.getElementById('confirm-delete').addEventListener('click', async () => {
+    const btn = document.getElementById('confirm-delete');
+    const status = document.getElementById('delete-status');
+    btn.disabled = true;
+    status.textContent = 'Deleting your account...';
+
+    try {
+      const res = await fetch(SUPABASE_URL + '/functions/v1/delete-account', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + currentSession.access_token,
+          'apikey': SUPABASE_ANON_KEY
+        }
+      });
+      const result = await res.json();
+      if (!res.ok) {
+        status.textContent = result.error || 'Something went wrong.';
+        btn.disabled = false;
+        return;
+      }
+      await sb.auth.signOut();
+      window.location.href = 'index.html';
+    } catch (err) {
+      status.textContent = 'Something went wrong. Please try again.';
+      btn.disabled = false;
+    }
+  });
+
+  init();
+</script>
+
+</body>
+</html>
