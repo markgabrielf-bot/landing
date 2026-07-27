@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log In — The Edit Bay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #14151A;
+    --panel: #1E2027;
+    --panel-line: #2B2E38;
+    --text: #F2F0EA;
+    --text-dim: #9AA0AC;
+    --signal-red: #FF4D5E;
+    --scope-cyan: #37D6C4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  .card{
+    width:100%;
+    max-width:420px;
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:6px;
+    padding:40px 34px;
+  }
+  .eyebrow{
+    color:var(--scope-cyan);
+    font-size:12px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:14px;
+  }
+  h1{
+    font-family:'Inter Tight', sans-serif;
+    font-size:1.7rem;
+    font-weight:700;
+    margin-bottom:8px;
+  }
+  .tagline{color:var(--text-dim); font-size:0.92rem; margin-bottom:28px;}
+  .tabs{display:flex; gap:8px; margin-bottom:24px; border-bottom:1px solid var(--panel-line);}
+  .tab{
+    background:none; border:none; color:var(--text-dim);
+    font-family:'Inter Tight', sans-serif; font-weight:700; font-size:14px;
+    padding:10px 4px 12px; cursor:pointer; border-bottom:2px solid transparent;
+  }
+  .tab.active{color:var(--text); border-bottom-color:var(--signal-red);}
+  form{display:none; flex-direction:column; gap:14px;}
+  form.active{display:flex;}
+  label{font-size:12px; color:var(--text-dim); letter-spacing:0.06em; text-transform:uppercase;}
+  .field{display:flex; flex-direction:column; gap:6px;}
+  input{
+    background:var(--bg); border:1px solid var(--panel-line); color:var(--text);
+    font-family:'Inter', sans-serif; font-size:15px; padding:13px 14px;
+    border-radius:3px; width:100%;
+  }
+  input:focus{outline:none; border-color:var(--scope-cyan);}
+  .btn{
+    background:var(--signal-red); color:#14151A; border:none;
+    font-family:'Inter Tight', sans-serif; font-weight:700; font-size:15px;
+    padding:15px 24px; border-radius:3px; cursor:pointer; margin-top:6px;
+    transition:background 0.15s ease;
+  }
+  .btn:hover{background:#ff6673;}
+  .btn:disabled{opacity:0.6; cursor:not-allowed;}
+  .status{font-size:13px; min-height:18px; color:var(--scope-cyan);}
+  .status.error{color:var(--signal-red);}
+  .back-link{
+    display:inline-block; margin-top:22px; font-size:13px; color:var(--text-dim);
+    text-decoration:none;
+  }
+  .back-link:hover{color:var(--text);}
+</style>
+</head>
+<body>
+
+  <div class="card">
+    <span class="eyebrow mono">The Edit Bay</span>
+    <h1>Course access</h1>
+    <p class="tagline">Log in with your registered account, or create one if you were invited to enroll.</p>
+
+    <div class="tabs">
+      <button class="tab active" id="tab-login">Log In</button>
+      <button class="tab" id="tab-signup">Sign Up</button>
+    </div>
+
+    <form id="login-form" class="active">
+      <div class="field">
+        <label for="login-email">Email</label>
+        <input type="email" id="login-email" required placeholder="you@email.com">
+      </div>
+      <div class="field">
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" required placeholder="••••••••">
+      </div>
+      <button type="submit" class="btn" id="login-btn">Log In</button>
+      <div class="status mono" id="login-status"></div>
+    </form>
+
+    <form id="signup-form">
+      <div class="field">
+        <label for="signup-name">Full Name</label>
+        <input type="text" id="signup-name" required placeholder="Juan Dela Cruz">
+      </div>
+      <div class="field">
+        <label for="signup-station">Fire Station</label>
+        <input type="text" id="signup-station" required placeholder="e.g. BFP Tacloban City Fire Station">
+      </div>
+      <div class="field">
+        <label for="signup-email">Email</label>
+        <input type="email" id="signup-email" required placeholder="you@email.com">
+      </div>
+      <div class="field">
+        <label for="signup-password">Password</label>
+        <input type="password" id="signup-password" required placeholder="At least 6 characters" minlength="6">
+      </div>
+      <button type="submit" class="btn" id="signup-btn">Create Account</button>
+      <div class="status mono" id="signup-status"></div>
+    </form>
+
+    <a class="back-link mono" href="index.html">&larr; Back to main site</a>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://jayrwrnlndlavmxywazz.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpheXJ3cm5sbmRsYXZteHl3YXp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUxNDIwODgsImV4cCI6MjEwMDcxODA4OH0.lRSNGUf_sKE2vzy39zT1BYGUnHH-bXWiR1GnxOCgJpQ';
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // If already logged in, skip straight to the dashboard
+  sb.auth.getSession().then(({ data }) => {
+    if (data.session) window.location.href = 'dashboard.html';
+  });
+
+  // Tab switching
+  const tabLogin = document.getElementById('tab-login');
+  const tabSignup = document.getElementById('tab-signup');
+  const loginForm = document.getElementById('login-form');
+  const signupForm = document.getElementById('signup-form');
+
+  tabLogin.addEventListener('click', () => {
+    tabLogin.classList.add('active'); tabSignup.classList.remove('active');
+    loginForm.classList.add('active'); signupForm.classList.remove('active');
+  });
+  tabSignup.addEventListener('click', () => {
+    tabSignup.classList.add('active'); tabLogin.classList.remove('active');
+    signupForm.classList.add('active'); loginForm.classList.remove('active');
+  });
+
+  // Log in
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('login-btn');
+    const status = document.getElementById('login-status');
+    btn.disabled = true;
+    status.className = 'status mono';
+    status.textContent = 'Logging in...';
+
+    const { error } = await sb.auth.signInWithPassword({
+      email: document.getElementById('login-email').value.trim(),
+      password: document.getElementById('login-password').value
+    });
+
+    if (error) {
+      status.className = 'status mono error';
+      status.textContent = error.message;
+      btn.disabled = false;
+    } else {
+      window.location.href = 'dashboard.html';
+    }
+  });
+
+  // Sign up
+  signupForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('signup-btn');
+    const status = document.getElementById('signup-status');
+    btn.disabled = true;
+    status.className = 'status mono';
+    status.textContent = 'Creating your account...';
+
+    const fullName = document.getElementById('signup-name').value.trim();
+    const fireStation = document.getElementById('signup-station').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const password = document.getElementById('signup-password').value;
+
+    const { data, error } = await sb.auth.signUp({ email, password });
+
+    if (error) {
+      status.className = 'status mono error';
+      status.textContent = error.message;
+      btn.disabled = false;
+      return;
+    }
+
+    // Save the profile info (name + fire station) alongside the new account
+    const userId = data.user ? data.user.id : null;
+    if (userId) {
+      const { error: profileError } = await sb.from('profiles').insert({
+        id: userId,
+        full_name: fullName,
+        fire_station: fireStation
+      });
+      if (profileError) {
+        status.className = 'status mono error';
+        status.textContent = 'Account created, but profile save failed: ' + profileError.message;
+        btn.disabled = false;
+        return;
+      }
+    }
+
+    if (data.session) {
+      window.location.href = 'dashboard.html';
+    } else {
+      status.textContent = 'Account created — check your email to confirm before logging in.';
+      btn.disabled = false;
+    }
+  });
+</script>
+
+</body>
+</html>
