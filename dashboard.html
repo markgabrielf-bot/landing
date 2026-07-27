@@ -66,7 +66,7 @@
   }
   .continue-btn:hover{opacity:0.9;}
 
-  /* ---- FACEBOOK COMMUNITY CARD - FIXED ---- */
+  /* Facebook community card */
   .fb-community-card {
     background: linear-gradient(145deg, var(--panel), rgba(24, 119, 242, 0.08));
     border: 2px solid var(--panel-line);
@@ -144,10 +144,6 @@
     background: var(--bg);
     border-radius: 8px;
     border: 1px solid var(--panel-line);
-  }
-  .fb-benefit-item .emoji {
-    font-size: 20px;
-    flex-shrink: 0;
   }
   .fb-community-footer {
     display: flex;
@@ -472,7 +468,7 @@
   }
 
   // ============================================================
-  // FACEBOOK COMMUNITY HTML - FIXED VERSION
+  // FACEBOOK COMMUNITY CARD
   // ============================================================
   function getFacebookCommunityHTML() {
     return `
@@ -484,30 +480,26 @@
             </svg>
           </div>
           <div>
-            <h2>👥 Join Our Facebook Community</h2>
+            <h2>Join Our Facebook Community</h2>
             <p>Connect with fellow students and get direct support</p>
           </div>
         </div>
         <div class="fb-community-body">
           <p>
-            Have questions, suggestions, or need help with a project? 
+            Have questions, suggestions, or need help with a project?
             <strong>Join our private Facebook group</strong> where you can:
           </p>
           <div class="fb-benefits">
             <div class="fb-benefit-item">
-              <span class="emoji">💬</span>
               <span>Ask questions about lessons</span>
             </div>
             <div class="fb-benefit-item">
-              <span class="emoji">📚</span>
               <span>Suggest new courses</span>
             </div>
             <div class="fb-benefit-item">
-              <span class="emoji">🤝</span>
-              <span>Share your work & get feedback</span>
+              <span>Share your work &amp; get feedback</span>
             </div>
             <div class="fb-benefit-item">
-              <span class="emoji">🎯</span>
               <span>Request tutorial topics</span>
             </div>
           </div>
@@ -519,8 +511,8 @@
             </svg>
             Join the Facebook Group
           </a>
-          <a href="#" class="fb-learn-more" onclick="alert('🎯 Join our Facebook group to:\n\n• Ask questions about your lessons\n• Suggest new courses you want\n• Share your work and get feedback\n• Request specific tutorials\n\nClick Join to be part of our community!'); return false;">
-            Learn More →
+          <a href="#" class="fb-learn-more" onclick="alert('Join our Facebook group to:\n\n- Ask questions about your lessons\n- Suggest new courses you want\n- Share your work and get feedback\n- Request specific tutorials\n\nClick Join to be part of our community!'); return false;">
+            Learn More
           </a>
         </div>
       </div>
@@ -528,7 +520,7 @@
   }
 
   // ============================================================
-  // RENDER CATALOG - WITH FACEBOOK SECTION VISIBLE
+  // RENDER CATALOG
   // ============================================================
   async function renderCatalog() {
     currentCourseId = null;
@@ -566,7 +558,7 @@
     // --- BUILD THE PAGE WITH FACEBOOK SECTION ---
     content.innerHTML = 
       // Welcome section
-      '<h1>Welcome back' + (currentProfile && currentProfile.full_name ? ', ' + escapeHtml(currentProfile.full_name.split(' ')[0]) : '') + ' 👋</h1>' +
+      '<h1>Welcome back' + (currentProfile && currentProfile.full_name ? ', ' + escapeHtml(currentProfile.full_name.split(' ')[0]) : '') + '</h1>' +
       '<p class="sub">Ready to create something today?</p>' +
       
       // Stats
@@ -579,7 +571,7 @@
       // Continue Learning
       continueHtml +
       
-      // ⭐ FACEBOOK COMMUNITY SECTION - RIGHT HERE ⭐
+      // Facebook community section
       getFacebookCommunityHTML() +
       
       // Browse Courses
@@ -596,7 +588,7 @@
       // Weekly Challenge
       '<div class="challenge-card">' +
         '<div>' +
-          '<div class="challenge-eyebrow">🎯 Weekly Challenge</div>' +
+          '<div class="challenge-eyebrow">Weekly Challenge</div>' +
           '<h2>' + escapeHtml(WEEKLY_CHALLENGE.label) + '</h2>' +
         '</div>' +
         '<button class="challenge-btn" id="challenge-btn">' + escapeHtml(WEEKLY_CHALLENGE.linkText) + ' →</button>' +
